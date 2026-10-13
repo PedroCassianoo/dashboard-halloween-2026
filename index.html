@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<!--
+  POLÍTICA DE SEGURANÇA (CSP): Permite conexões seguras com o Supabase e Chart.js
+-->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; form-action 'none'; base-uri 'self';">
+<title>Halloween Party 2026 · Inscrições · Red Balloon Paulínia</title>
+
+<!-- Chart.js via cdnjs (somente desenha o gráfico; nenhum dado sai do navegador) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" referrerpolicy="no-referrer"></script>
+
+<style>
+  /* =====================================================================
+     FONTE DE DESTAQUE (Ambit)
+     Usa a Ambit se estiver instalada no computador ou se o arquivo
+     "Ambit-Bold.woff2" estiver na mesma pasta deste HTML.
+     Caso contrário, cai automaticamente para uma fonte do sistema.
+     ===================================================================== */
+  @font-face {
+    font-family: "Ambit";
+    font-weight: 700 900;
+    font-display: swap;
+    src: local("Ambit Bold"), local("Ambit-Bold"), local("Ambit"),
+         url("Ambit-Bold.woff2") format("woff2");
+  }
+
+  /* ===================== TOKENS DE DESIGN ===================== */
+  :root {
+    --bg: #140a24;
+    --bg-2: #1c0f33;
+    --surface: #231540;
+    --surface-2: #2d1b52;
+    --surface-3: #382266;
+    --border: rgba(233, 225, 250, .12);
+    --border-strong: rgba(233, 225, 250, .24);
+    --text: #F6F1FF;
+    --muted: #C7B9E6;
+    --faint: #A796CC;
+    --orange: #FF7A1A;       /* laranja abóbora (destaque) */
+    --orange-2: #FF9A4D;
+    --orange-ink: #1A0D00;   /* texto escuro sobre laranja */
+    --red: #E30613;          /* vermelho Red Balloon (alertas / selo) */
+    --red-text: #FF8A90;     /* vermelho legível sobre fundo escuro (AA) */
+    --red-bg: rgba(227, 6, 19, .16);
+    --green: #4BDB9E;
+    --green-bg: rgba(75, 219, 158, .14);
+    --yellow: #FFC857;
+    --yellow-bg: rgba(255, 200, 87, .13);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 14px 34px rgba(0, 0, 0, .35);
+    --focus: #FFD29E;
+    --font-title: "Ambit", "Segoe UI Black", "Arial Black", "Segoe UI", system-ui, sans-serif;
+    --font-data: "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+
+  body {
+    margin: 0;
+    font-family: var(--font-data);
+    color: var(--text);
+    line-height: 1.5;
+    overflow-x: hidden; /* garantia extra: sem rolagem horizontal */
+    background:
+      radial-gradient(900px 420px at 92% -8%, rgba(255, 122, 26, .16), transparent 60%),
+      radial-gradient(700px 380px at -10% 10%, rgba(140, 70, 255, .18), transparent 60%),
+      linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 55%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  /* Foco sempre visível para navegação por teclado */
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+
+  .sr-only {
+    position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
+  a { color: var(--orange-2); }
+
+  /* ===================== CABEÇALHO ===================== */
+  .topo { position: relative; padding: 28px 0 18px; overflow: hidden; }
+  .topo-decor { position: absolute; inset: 0; pointer-events: none; opacity: .14; }
+  .topo-inner { position: relative; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; justify-content: space-between; }
+  .marca { display: flex; gap: 18px; align-items: center; min-width: 0; }
+  .marca svg { flex: 0 0 auto; filter: drop-shadow(0 6px 14px rgba(255, 122, 26, .35)); }
+  .kicker {
+    margin: 0; font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--orange-2);
+  }
+  h1 {
+    margin: 2px 0 4px; font-family: var(--font-title); font-weight: 800; color: #FFFFFF;
+    font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1.05; letter-spacing: -.01em;
+  }
+  .evento-meta { margin: 0; color: var(--muted); font-size: .95rem; }
+  .evento-meta strong { color: var(--text); font-weight: 600; }
+
+  .topo-lado { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .contagem {
+    display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 999px;
+    background: rgba(255, 122, 26, .14); border: 1px solid rgba(255, 122, 26, .5); color: #FFE3CC;
+    font-weight: 600; font-size: .95rem;
+  }
+  .contagem .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(255, 122, 26, .25); }
+  .contagem strong { color: #fff; font-size: 1.05rem; }
+  .contagem.urgente { background: var(--red-bg); border-color: rgba(255, 138, 144, .6); color: #FFD9DB; }
+  .contagem.urgente .dot { background: var(--red); box-shadow: 0 0 0 4px rgba(227, 6, 19, .3); }
+  .contagem.encerrado { background: rgba(255, 255, 255, .06); border-color: var(--border-strong); color: var(--muted); }
+  .contagem.encerrado .dot { background: var(--faint); box-shadow: none; }
+  .topo-acoes { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+  .atualizado { color: var(--faint); font-size: .85rem; }
+
+  /* ===================== BOTÕES ===================== */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: 600 .95rem/1 var(--font-data); padding: 11px 16px; border-radius: 10px; cursor: pointer;
+    border: 1px solid transparent; transition: background .15s, border-color .15s, transform .05s; text-decoration: none;
+    min-height: 42px;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primario { background: var(--orange); color: var(--orange-ink); }
+  .btn-primario:hover { background: var(--orange-2); }
+  .btn-secundario { background: rgba(255, 255, 255, .06); color: var(--text); border-color: var(--border-strong); }
+  .btn-secundario:hover { background: rgba(255, 255, 255, .12); }
+  .btn-perigo { background: transparent; color: var(--red-text); border-color: rgba(255, 138, 144, .55); }
+  .btn-perigo:hover { background: var(--red-bg); }
+  .btn-link { background: none; border: none; color: var(--orange-2); padding: 4px 2px; min-height: 0; text-decoration: underline; font-weight: 600; }
+  .btn-arquivo { position: relative; }
+  .btn-arquivo input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+  .btn-arquivo:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  /* ===================== AVISOS ===================== */
+  .avisos { display: grid; gap: 10px; margin: 6px 0 18px; }
+  .aviso {
+    display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; border-radius: 12px;
+    border: 1px solid var(--border-strong); background: rgba(255, 255, 255, .05); font-size: .93rem;
+  }
+  .aviso .ico { flex: 0 0 auto; font-size: 1.1rem; line-height: 1.3; }
+  .aviso p { margin: 0; }
+  .aviso-info { border-color: rgba(255, 122, 26, .45); background: rgba(255, 122, 26, .09); }
+  .aviso-alerta { border-color: rgba(255, 200, 87, .5); background: var(--yellow-bg); }
+  .aviso-erro { border-color: rgba(255, 138, 144, .55); background: var(--red-bg); }
+  .aviso-sucesso { border-color: rgba(75, 219, 158, .55); background: var(--green-bg); }
+
+  /* ===================== CARDS ===================== */
+  .cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-bottom: 22px; }
+  .card {
+    position: relative; background: linear-gradient(180deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow); min-width: 0;
+  }
+  .card::before { content: ""; position: absolute; left: 0; top: 18px; bottom: 18px; width: 4px; border-radius: 0 4px 4px 0; background: var(--faint); }
+  .card.destaque::before { background: var(--orange); }
+  .card.oport::before { background: var(--yellow); }
+  .card h2 { margin: 0 0 6px; font-size: .82rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .card .numero {
+    font-family: var(--font-data); font-weight: 800; font-size: clamp(2.6rem, 4.4vw, 3.6rem); line-height: 1;
+    font-variant-numeric: tabular-nums; color: #fff; letter-spacing: -.02em; margin: 6px 0 10px;
+  }
+  .card .numero small { font-size: .38em; font-weight: 700; color: var(--muted); letter-spacing: 0; margin-left: 6px; }
+  .card .sub { margin: 0; color: var(--muted); font-size: .95rem; }
+  .card .sub strong { color: #fff; font-variant-numeric: tabular-nums; }
+  .card.destaque .numero { color: #FFE9D8; }
+  .progresso { margin-top: 14px; height: 12px; border-radius: 999px; background: rgba(255, 255, 255, .1); overflow: hidden; }
+  .progresso i { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #FF5E00, var(--orange-2)); transition: width .8s cubic-bezier(.2, .8, .2, 1); }
+  .progresso-legenda { display: flex; justify-content: space-between; margin-top: 6px; font-size: .78rem; color: var(--faint); }
+  .meta { margin-top: 10px; display: inline-flex; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 999px; background: var(--green-bg); border: 1px solid rgba(75, 219, 158, .5); color: #CFF7E4; font-weight: 700; font-size: .88rem; }
+  .chip-base { margin-top: 10px; display: inline-flex; gap: 6px; align-items: center; padding: 5px 10px; border-radius: 999px; font-size: .82rem; font-weight: 600; }
+  .chip-base.ok { background: var(--green-bg); color: #CFF7E4; border: 1px solid rgba(75, 219, 158, .45); }
+  .chip-base.erro { background: var(--yellow-bg); color: #FFE7B3; border: 1px solid rgba(255, 200, 87, .55); }
+
+  /* ===================== PAINÉIS ===================== */
+  .painel {
+    background: linear-gradient(180deg, rgba(45, 27, 82, .92), rgba(35, 21, 64, .92));
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow);
+    margin-bottom: 22px; min-width: 0;
+  }
+  .painel-cab { display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .painel h2 { margin: 0; font-family: var(--font-title); font-weight: 800; font-size: 1.35rem; color: #fff; letter-spacing: -.005em; }
+  .painel .desc { margin: 4px 0 0; color: var(--muted); font-size: .92rem; }
+
+  /* Alternância de ordenação */
+  .segmentado { display: inline-flex; padding: 4px; border-radius: 12px; background: rgba(0, 0, 0, .25); border: 1px solid var(--border); }
+  .segmentado button {
+    font: 600 .88rem/1 var(--font-data); color: var(--muted); background: transparent; border: 0; padding: 9px 14px; border-radius: 9px; cursor: pointer; min-height: 36px;
+  }
+  .segmentado button[aria-pressed="true"] { background: var(--orange); color: var(--orange-ink); }
+  .segmentado button:not([aria-pressed="true"]):hover { color: #fff; background: rgba(255, 255, 255, .07); }
+
+  .legenda { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; font-size: .86rem; color: var(--muted); margin: 0 0 10px; }
+  .legenda span { display: inline-flex; gap: 8px; align-items: center; }
+  .legenda i { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .legenda .ok i { background: var(--orange); }
+  .legenda .cr i { background: var(--red); }
+
+  .prioridade { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; font-size: .9rem; }
+  .prioridade > strong { color: #fff; margin-right: 4px; }
+  .selo {
+    display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: .8rem; font-weight: 700;
+    background: var(--red); color: #fff; white-space: nowrap;
+  }
+  .selo-ok { background: var(--green-bg); color: #CFF7E4; border: 1px solid rgba(75, 219, 158, .45); }
+  .chip-prior { padding: 4px 10px; border-radius: 999px; background: var(--red-bg); border: 1px solid rgba(255, 138, 144, .5); color: #FFD9DB; font-weight: 600; font-size: .85rem; font-variant-numeric: tabular-nums; }
+
+  .grafico-wrap { position: relative; width: 100%; height: 460px; }
+  .grafico-wrap canvas { display: block; }
+  .grafico-fallback { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .grafico-fallback li { display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; font-size: .9rem; }
+  .grafico-fallback .barra { height: 14px; border-radius: 6px; background: var(--orange); min-width: 3px; }
+  .grafico-fallback .critica .barra { background: var(--red); }
+  .grafico-fallback .critica span { color: var(--red-text); font-weight: 700; }
+
+  /* ===================== TABELA ===================== */
+  .tabela-wrap { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; font-variant-numeric: tabular-nums; }
+  caption { text-align: left; padding: 0 0 10px; color: var(--muted); font-size: .9rem; }
+  th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  thead th { font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: rgba(0, 0, 0, .22); font-weight: 700; }
+  tbody th { font-weight: 800; color: #fff; }
+  tbody tr:hover { background: rgba(255, 255, 255, .04); }
+  tbody tr.linha-critica th { color: var(--red-text); }
+  .num { text-align: right; }
+  tfoot th, tfoot td { font-weight: 800; color: #fff; background: rgba(255, 122, 26, .1); border-bottom: 0; border-top: 2px solid rgba(255, 122, 26, .5); }
+  .adesao { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+  .mini { width: 80px; height: 8px; border-radius: 99px; background: rgba(255, 255, 255, .1); overflow: hidden; display: inline-block; }
+  .mini i { display: block; height: 100%; background: var(--orange); border-radius: 99px; }
+  .linha-critica .mini i { background: var(--red); }
+  .excedente { color: var(--yellow); font-weight: 700; font-size: .8rem; margin-left: 6px; }
+  .verificacao { margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: .86rem; color: var(--muted); }
+  .verificacao .ok { color: #BFF3DB; }
+  .verificacao .erro { color: #FFE7B3; }
+
+  /* ===================== ENTRADA DE DADOS E CONFIGURAÇÕES ===================== */
+  .grade-inferior { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+  .rotulo { display: block; font-weight: 700; margin-bottom: 8px; }
+  textarea {
+    width: 100%; min-height: 190px; resize: vertical; padding: 12px 14px; border-radius: 12px;
+    border: 1px solid var(--border-strong); background: rgba(10, 4, 22, .55); color: var(--text);
+    font: .92rem/1.5 Consolas, "Cascadia Mono", "Courier New", monospace;
+  }
+  textarea::placeholder { color: #9A8BBE; }
+  .dica { margin: 8px 0 0; color: var(--faint); font-size: .84rem; }
+  .acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .linha-opcoes { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; margin-top: 12px; font-size: .9rem; color: var(--muted); }
+  .check { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+  .check input { width: 18px; height: 18px; accent-color: var(--orange); }
+  .msg { margin: 12px 0 0; min-height: 1.2em; font-size: .92rem; font-weight: 600; }
+  .msg.ok { color: #BFF3DB; }
+  .msg.erro { color: var(--red-text); }
+  .msg.info { color: #FFE3CC; }
+
+  .relatorio { margin-top: 18px; display: grid; gap: 12px; }
+  .resumo-import { margin: 0; padding: 12px 14px; border-radius: 12px; background: rgba(0, 0, 0, .2); border: 1px solid var(--border); font-size: .9rem; color: var(--muted); }
+  .resumo-import strong { color: #fff; }
+  .caixa { border-radius: 12px; border: 1px solid var(--border-strong); background: rgba(0, 0, 0, .18); padding: 12px 14px; }
+  .caixa h3 { margin: 0; font-size: 1rem; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .caixa .contador { font-variant-numeric: tabular-nums; padding: 1px 9px; border-radius: 99px; font-size: .82rem; background: rgba(255, 255, 255, .1); }
+  .caixa.revisar { border-color: rgba(255, 138, 144, .6); background: var(--red-bg); }
+  .caixa.revisar .contador { background: var(--red); color: #fff; }
+  .caixa.dups { border-color: rgba(255, 200, 87, .5); }
+  .caixa.vazia { border-color: rgba(75, 219, 158, .4); background: var(--green-bg); }
+  .caixa p { margin: 6px 0 0; font-size: .88rem; color: var(--muted); }
+  .caixa details { margin-top: 8px; }
+  .caixa summary, .lista-inscritos summary, .config summary { cursor: pointer; font-weight: 700; color: var(--orange-2); }
+  .caixa ul { margin: 8px 0 0; padding-left: 0; list-style: none; display: grid; gap: 6px; max-height: 240px; overflow: auto; }
+  .caixa li { font-size: .87rem; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; padding: 6px 8px; border-radius: 8px; background: rgba(0, 0, 0, .2); }
+  .caixa code { font-family: Consolas, "Cascadia Mono", monospace; color: #fff; word-break: break-all; }
+  .caixa .motivo { color: #FFD9DB; font-size: .82rem; }
+  .caixa .nlinha { color: var(--faint); font-size: .78rem; }
+
+  .config summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .config summary::-webkit-details-marker { display: none; }
+  .config summary h2 { font-size: 1.2rem; }
+  .config summary .seta { color: var(--orange-2); font-size: .9rem; white-space: nowrap; }
+  .config[open] summary .seta-txt::after { content: "Fechar"; }
+  .config:not([open]) summary .seta-txt::after { content: "Abrir"; }
+  .grade-bases { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 10px; margin-top: 14px; }
+  .campo label { display: block; font-size: .8rem; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .campo input {
+    width: 100%; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--border-strong); background: rgba(10, 4, 22, .55);
+    color: #fff; font: 700 1rem var(--font-data); font-variant-numeric: tabular-nums;
+  }
+  .soma-bases { margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; font-size: .9rem; font-weight: 600; }
+  .soma-bases.ok { background: var(--green-bg); color: #CFF7E4; border: 1px solid rgba(75, 219, 158, .45); }
+  .soma-bases.erro { background: var(--yellow-bg); color: #FFE7B3; border: 1px solid rgba(255, 200, 87, .55); }
+  .campo-limite { margin-top: 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .campo-limite input { width: 90px; }
+  .campo-limite label { margin: 0; font-size: .9rem; color: var(--text); }
+
+  .lista-inscritos summary { font-size: 1.05rem; list-style: none; display: flex; align-items: center; gap: 10px; }
+  .lista-inscritos summary::-webkit-details-marker { display: none; }
+  .lista-inscritos summary::before { content: "▸"; transition: transform .15s; }
+  .lista-inscritos[open] summary::before { transform: rotate(90deg); }
+  .lista-ferramentas { display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center; margin: 14px 0; font-size: .9rem; color: var(--muted); }
+  .lista-ferramentas select { padding: 7px 10px; border-radius: 8px; background: rgba(10, 4, 22, .55); color: #fff; border: 1px solid var(--border-strong); font: 600 .9rem var(--font-data); }
+  .grupos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .grupo { background: rgba(0, 0, 0, .2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; min-width: 0; }
+  .grupo h4 { margin: 0 0 6px; font-size: .95rem; color: #fff; }
+  .grupo h4 span { color: var(--faint); font-weight: 600; }
+  .grupo ol { margin: 0; padding-left: 22px; font-size: .88rem; }
+  .grupo li { margin: 2px 0; overflow-wrap: anywhere; }
+  .grupo .vazio { margin: 0; color: var(--faint); font-size: .85rem; }
+  .tag-aviso { display: inline-block; margin-left: 4px; padding: 0 7px; border-radius: 99px; font-size: .72rem; font-weight: 700; background: var(--yellow-bg); color: #FFE7B3; border: 1px solid rgba(255, 200, 87, .5); }
+
+  .rodape { padding: 10px 0 36px; color: var(--faint); font-size: .84rem; }
+  .rodape p { margin: 4px 0; }
+
+  /* ===================== RESPONSIVO ===================== */
+  @media (max-width: 1040px) {
+    .grade-inferior { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .cards { grid-template-columns: minmax(0, 1fr); }
+    .topo-lado { align-items: flex-start; }
+    .topo-acoes { justify-content: flex-start; }
+  }
+  @media (max-width: 560px) {
+    .container { padding: 0 14px; }
+    .painel, .card { padding: 18px 16px; }
+    th, td { padding: 9px 10px; }
+    .mini { width: 50px; }
+    .marca svg { width: 52px; height: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== CABEÇALHO ===================== -->
+<header class="topo">
+  <!-- Morcegos decorativos (bem discretos) -->
+  <svg class="topo-decor" viewBox="0 0 1200 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <g fill="#FFFFFF">
+      <path d="M820 40c8-10 18-12 26-6 4-8 10-10 14-6 4-4 10-2 14 6 8-6 18-4 26 6-10-2-18 2-22 10-4-4-8-4-12 0-4-4-8-4-12 0-4-8-12-12-34-10z"/>
+      <path transform="translate(-160 60) scale(.7)" d="M820 40c8-10 18-12 26-6 4-8 10-10 14-6 4-4 10-2 14 6 8-6 18-4 26 6-10-2-18 2-22 10-4-4-8-4-12 0-4-4-8-4-12 0-4-8-12-12-34-10z"/>
+      <path transform="translate(260 -10) scale(.55)" d="M820 40c8-10 18-12 26-6 4-8 10-10 14-6 4-4 10-2 14 6 8-6 18-4 26 6-10-2-18 2-22 10-4-4-8-4-12 0-4-4-8-4-12 0-4-8-12-12-34-10z"/>
+    </g>
+  </svg>
+  <div class="container topo-inner">
+    <div class="marca">
+      <!-- Abóbora com balão vermelho (Red Balloon) -->
+      <svg width="68" height="68" viewBox="0 0 68 68" aria-hidden="true" focusable="false">
+        <ellipse cx="34" cy="42" rx="26" ry="20" fill="#FF7A1A"/>
+        <ellipse cx="34" cy="42" rx="12" ry="20" fill="#FF9A4D" opacity=".55"/>
+        <path d="M31 22c0-5 2-9 6-11l2 3c-3 2-4 5-4 8z" fill="#4BDB9E"/>
+        <path d="M22 38l6-5 2 7zM46 38l-6-5-2 7z" fill="#1A0D00"/>
+        <path d="M23 48c4 4 18 4 22 0l-3 5-3-2-3 3-3-3-3 3-3-3-3 2z" fill="#1A0D00"/>
+        <circle cx="56" cy="12" r="8" fill="#E30613"/>
+        <path d="M56 20c-1 6 3 8 0 14" stroke="#F6F1FF" stroke-width="1.4" fill="none"/>
+      </svg>
+      <div>
+        <p class="kicker">Red Balloon Paulínia · Painel de inscrições</p>
+        <h1>Halloween Party 2026</h1>
+        <p class="evento-meta"><strong>28/10/2026</strong> · 17h às 20h · Exclusivo para alunos · Inscrições até <strong>23/10</strong></p>
+      </div>
+    </div>
+    <div class="topo-lado">
+      <div class="contagem" id="contagem" role="status">
+        <span class="dot" aria-hidden="true"></span>
+        <span id="contagemTexto">Calculando prazo…</span>
+      </div>
+      <div class="topo-acoes">
+        <span class="atualizado" id="atualizadoEm"></span>
+        <a class="btn btn-secundario" href="#entradaDados" id="btnIrEntrada">Colar lista de inscritos</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container" id="conteudo">
+
+  <!-- Região de avisos (sem nomes de alunos) -->
+  <div class="avisos" id="avisos" aria-live="polite"></div>
+
+  <!-- ===================== BLOCO 1: INDICADORES ===================== -->
+  <section class="cards" aria-label="Indicadores principais">
+    <article class="card">
+      <h2>Base total</h2>
+      <div class="numero"><span id="valBase" data-valor="0">0</span><small>alunos</small></div>
+      <p class="sub">Soma da base dos 11 estágios</p>
+      <span class="chip-base ok" id="chipBase">✓ Confere com 204</span>
+    </article>
+
+    <article class="card destaque">
+      <h2>Inscritos no Evento</h2>
+      <div class="numero"><span id="valInscritos" data-valor="0">0</span><small id="pctInscritosGrande">0.0%</small></div>
+      <p class="sub"><strong id="pctInscritos">0.0%</strong> da base total inscrita</p>
+      <div class="progresso" id="progresso" role="progressbar" aria-label="Progresso das inscrições" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <i id="barraInscritos"></i>
+      </div>
+      <div class="progresso-legenda"><span>0</span><span id="legendaMeta">Meta: 204</span></div>
+    </article>
+
+    <article class="card oport">
+      <h2>Oportunidades</h2>
+      <div class="numero"><span id="valOport" data-valor="0">0</span><small id="pctOportGrande">0.0%</small></div>
+      <p class="sub"><strong id="pctOport">0.0%</strong> da base ainda não se inscreveu</p>
+      <div id="metaBatida" class="meta" hidden>🎃 Meta batida! Todos os alunos inscritos.</div>
+    </article>
+  </section>
+
+  <!-- ===================== BLOCO 2: GRÁFICO ===================== -->
+  <section class="painel" aria-labelledby="tGrafico">
+    <div class="painel-cab">
+      <div>
+        <h2 id="tGrafico">Engajamento por nível</h2>
+        <p class="desc">Inscritos por estágio. O percentual é a participação do estágio no total de inscritos. <span id="descLimite">Turma Crítica: até 3 inscritos.</span></p>
+      </div>
+      <div class="segmentado" role="group" aria-label="Ordenação do gráfico e da tabela">
+        <button type="button" id="ordEstagios" aria-pressed="true">Ordem dos estágios</button>
+        <button type="button" id="ordInscritos" aria-pressed="false">Ordenar por inscritos</button>
+      </div>
+    </div>
+    <div class="legenda" aria-hidden="true">
+      <span class="ok"><i></i>Adesão Ok</span>
+      <span class="cr"><i></i>Turma Crítica</span>
+    </div>
+    <div class="prioridade" id="prioridade"></div>
+    <div class="grafico-wrap" id="graficoWrap">
+      <canvas id="grafico" role="img" aria-label="Gráfico de barras de inscritos por estágio"></canvas>
+    </div>
+    <!-- Lista com os mesmos rótulos do gráfico: leitores de tela e plano B se o Chart.js não carregar -->
+    <ul class="sr-only" id="graficoLista"></ul>
+  </section>
+
+  <!-- ===================== BLOCO 3: TABELA ===================== -->
+  <section class="painel" aria-labelledby="tTabela">
+    <div class="painel-cab">
+      <div>
+        <h2 id="tTabela">Tabela de apoio</h2>
+        <p class="desc">Base, inscritos, oportunidades e adesão de cada estágio. Os totais batem com os cards.</p>
+      </div>
+    </div>
+    <div class="tabela-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Estágio</th>
+            <th scope="col" class="num">Base</th>
+            <th scope="col" class="num">Inscritos</th>
+            <th scope="col" class="num">Oportunidades</th>
+            <th scope="col" class="num">Adesão do estágio (%)</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaCorpo"></tbody>
+        <tfoot id="tabelaTotal"></tfoot>
+      </table>
+    </div>
+    <div class="verificacao" id="verificacao"></div>
+  </section>
+
+  <!-- ===================== ENTRADA DE DADOS + CONFIGURAÇÕES ===================== -->
+  <div class="grade-inferior">
+    <section class="painel" id="entradaDados" aria-labelledby="tEntrada">
+      <div class="painel-cab">
+        <div>
+          <h2 id="tEntrada">Entrada de dados</h2>
+          <p class="desc">Tudo é processado neste navegador. Nenhum dado é enviado para a internet.</p>
+        </div>
+        <button type="button" class="btn-link btn" id="btnExemplo">Carregar dados de exemplo</button>
+      </div>
+
+      <label for="entrada" class="rotulo">Cole a lista de inscritos (uma linha por aluno)</label>
+      <textarea id="entrada" spellcheck="false" autocomplete="off"
+        placeholder="Maria Souza;K2&#10;João Lima, T 4&#10;Ana Prado - T-1&#10;Lucas Rocha&#9;J2&#10;J1;Pedro Alves"></textarea>
+      <p class="dica">Formatos aceitos: <code>Nome;Estágio</code> · <code>Nome, Estágio</code> · <code>Nome - Estágio</code> · <code>Nome[TAB]Estágio</code> · <code>Estágio;Nome</code>. Atalho: Ctrl+Enter atualiza o dashboard.</p>
+
+      <div class="acoes">
+        <button type="button" class="btn btn-primario" id="btnAtualizar">Atualizar dashboard</button>
+        <button type="button" class="btn btn-secundario" id="btnAdicionar">Adicionar à lista</button>
+        <label class="btn btn-secundario btn-arquivo">
+          <input type="file" id="arquivo" accept=".csv,.txt,text/csv,text/plain" aria-label="Importar arquivo CSV ou TXT">
+          Importar CSV/TXT
+        </label>
+        <button type="button" class="btn btn-perigo" id="btnLimpar">Limpar dados</button>
+      </div>
+      <div class="linha-opcoes">
+        <label class="check"><input type="checkbox" id="chkSalvar" checked> Manter a lista salva neste navegador</label>
+      </div>
+      <p class="msg" id="msgEntrada" role="status" aria-live="polite"></p>
+
+      <!-- Resultado da importação: linhas inválidas e duplicadas nunca somem em silêncio -->
+      <div class="relatorio" id="importacao">
+        <p class="resumo-import" id="resumoImport">Nenhuma importação ainda.</p>
+        <div class="caixa" id="caixaRevisar"></div>
+        <div class="caixa dups" id="caixaDuplicados"></div>
+        <div class="caixa dups" id="caixaPossiveis"></div>
+      </div>
+    </section>
+
+    <section class="painel" aria-label="Configurações">
+      <details class="config" id="config">
+        <summary>
+          <h2>Configurações</h2>
+          <span class="seta"><span class="seta-txt"></span></span>
+        </summary>
+        <p class="desc">Base de alunos por estágio e limite de Turma Crítica. Salvo automaticamente neste navegador.</p>
+        <div class="grade-bases" id="gradeBases"></div>
+        <p class="soma-bases ok" id="somaBases" role="status">Soma das bases: 204</p>
+        <div class="campo campo-limite">
+          <label for="limite">Turma Crítica quando inscritos for menor ou igual a</label>
+          <input type="number" id="limite" min="0" step="1" inputmode="numeric">
+        </div>
+        <div class="acoes">
+          <button type="button" class="btn btn-secundario" id="btnRestaurar">Restaurar valores do arquivo</button>
+        </div>
+        <p class="msg ok" id="msgConfig" role="status" aria-live="polite"></p>
+      </details>
+    </section>
+  </div>
+
+  <!-- ===================== LISTA DE INSCRITOS (recolhida por padrão) ===================== -->
+  <section class="painel">
+    <details class="lista-inscritos" id="listaInscritos">
+      <summary>Ver lista de inscritos (<span id="qtdLista">0</span>)</summary>
+      <div class="lista-ferramentas">
+        <label class="check"><input type="checkbox" id="chkMascarar" checked> Ocultar nomes parcialmente</label>
+        <label class="check"><input type="checkbox" id="chkMostrarFaltantes"> Mostrar quem ainda não se inscreveu</label>
+        <label>Estágio:
+          <select id="filtroEstagio"><option value="">Todos</option></select>
+        </label>
+      </div>
+      <div class="grupos" id="listaConteudo"></div>
+    </details>
+  </section>
+
+  <p class="sr-only" id="anuncio" aria-live="polite"></p>
+</main>
+
+<footer class="container rodape">
+  <p>🔒 Privacidade: os dados dos alunos ficam somente neste navegador. A página não envia informações a servidores, APIs ou ferramentas de analytics.</p>
+  <p>Red Balloon Paulínia · Halloween Party · 28/10/2026, 17h às 20h.</p>
+</footer>
+
+<script type="module">
+import { supabase } from './src/lib/supabaseClient.js';
+import { getRegistrations, saveRegistrationsBatch, getStagesMap } from './src/services/dashboardService.js';
+
+/* =====================================================================
+   1) CONFIGURAÇÃO INICIAL
+   ===================================================================== */
+
+// ✅ BASE OFICIAL DE ALUNOS POR ESTÁGIO (Red Balloon Paulínia - Total: 204 alunos)
+// Fonte: GRADE DASH REMA 26.27.xlsx (Página6: 199 alunos em K1-T5 + TURMAS 2026: 5 alunos em T6).
+// Contagem oficial: K1: 8, K2: 22, J: 24, J1: 27, J2: 30, T1: 24, T2: 24, T3: 26, T4: 7, T5: 7, T6: 5.
+const BASE_POR_ESTAGIO = {
+  K1: 8,
+  K2: 22,
+  J:  24,
+  J1: 27,
+  J2: 30,
+  T1: 24,
+  T2: 24,
+  T3: 26,
+  T4: 7,
+  T5: 7,
+  T6: 5
+};
+
+// Base completa dos 204 alunos matriculados na escola (utilizada para identificação automática e acompanhamento de oportunidades)
+const ALUNOS_OFICIAIS = [
+  ["Isabela Bugarim Pereira", "J"],
+  ["Pedro Moreira", "J"],
+  ["Angelina Camargo Freire", "J"],
+  ["Ana Luisa Barbosa", "J"],
+  ["Antonella Gomes Machado", "J"],
+  ["Cecilia Bruni Avancini", "J"],
+  ["Cecília Ortolan Lopes", "J"],
+  ["Fernanda Mazzini Carvalho", "J"],
+  ["Ivy Refundini Albuquerque", "J"],
+  ["Larissa Costa Pinheiro", "J"],
+  ["Livia Galvão dos Santos", "J"],
+  ["Luisa Giroto Vieira", "J"],
+  ["Luiza Castro Köpke", "J"],
+  ["Mariah dos Santos Borghi", "J"],
+  ["Miguel Chiavegato Meloni", "J"],
+  ["Pedro Zilião Prado Pizzini", "J"],
+  ["Alice Bull Ferreira", "J1"],
+  ["Augusto Neves Madureira", "J1"],
+  ["Sofia Batalha Pessagno", "J1"],
+  ["Davi de Gusmão Silva Ferreira", "K2"],
+  ["Helena Martins Rocha", "K2"],
+  ["Isis Fortes Scorsoni", "K2"],
+  ["Marina Minatel Persson", "K2"],
+  ["Nilo de Aragão Freire Ferreira Finger", "K2"],
+  ["Elisa Romeiro de Almeida", "J2"],
+  ["Gabriel Carvalho Carielo", "J2"],
+  ["Larissa Tinoco Menezes", "J2"],
+  ["Lorenzo Vieira de Almeida", "J2"],
+  ["Luisa Coimbra de Castro", "J2"],
+  ["Maria Antonia Aires Marassi", "J2"],
+  ["Matheus Godoy Bresil", "J2"],
+  ["Miguel Teixeira Capone", "J2"],
+  ["Mirela Viana de Souza", "J2"],
+  ["Sarah Monteiro de Lucas", "J2"],
+  ["Beatriz Vieira de Luca", "J2"],
+  ["Flora Luiza Dantas Antunes", "J2"],
+  ["Henrique Rezende Pacheco", "J2"],
+  ["Henrique Santiciolli Lage", "J2"],
+  ["Joaquim Brandão Ramos Soares", "J2"],
+  ["Leonardo Nascimbem de Godoy", "J2"],
+  ["Pedro Luiz Tasinaffo Simão", "J2"],
+  ["Bernardo da Costa Bico", "K1"],
+  ["Manuela Bernardino Fida", "K1"],
+  ["Alissa Mirone de Almeida Ferreira", "K1"],
+  ["Pietro Lira Rozzi", "K1"],
+  ["Gustavo Resende Ribeiro", "K1"],
+  ["Henry Gavioli Brenelli", "K1"],
+  ["Maya Matos Dantas", "K1"],
+  ["Noah Batalha Pessagno", "K1"],
+  ["Gustavo de Luca Lima", "J2"],
+  ["Heitor de Moraes Furtado", "J2"],
+  ["Isabela Capel Cardoso", "J2"],
+  ["Sara Rossin Akahoshi Collado", "J2"],
+  ["Theo Duclos Trindade de Andrade", "J2"],
+  ["Miguel Sampaio Wiltenburg", "J2"],
+  ["Alice Galvani Coteco", "J2"],
+  ["Pedro Camargo Zanetti", "J2"],
+  ["Alice Souza Justino", "T1"],
+  ["Beatriz Scarpim Mazzuia", "T1"],
+  ["Isadora Vicentin Lima", "T1"],
+  ["Julia Russo Hortencio", "T1"],
+  ["Lívia Coimbra de Castro", "T1"],
+  ["Pedro Isao Kanashiro Katsumata", "T1"],
+  ["Sophia da Silva Rubio", "T1"],
+  ["Eduardo Cavazotto Filho", "T1"],
+  ["Isis Valentina Roberto Garcez", "T1"],
+  ["Clayton Rodrigo Machado Junior", "T1"],
+  ["Giovanna Mussato Ferreira", "T1"],
+  ["João Kazuo Guima", "T1"],
+  ["Laura Felício Alves", "T1"],
+  ["Manuela Morales Fortunato", "T1"],
+  ["Mateus Linhares Alves", "T1"],
+  ["Vitor Angelucci Maciel", "T1"],
+  ["Barbara Stort Campos", "T1"],
+  ["Davi Quinalia Leite Penteado", "T1"],
+  ["Diogo Francisco Sarro Moraes", "T1"],
+  ["Heloisa Silva Marques", "T1"],
+  ["João Arruda Amatte", "T1"],
+  ["Otávio Vieira de Luca", "T1"],
+  ["Isabela Santos Caldas", "T1"],
+  ["Luiza Trevenzoli Corrêa Dias", "T1"],
+  ["Bento Bestetti", "J2"],
+  ["Georges Balech Neto", "J2"],
+  ["Isadora Aparecida Guadagnini Fagnani", "J2"],
+  ["Lorenzzo Mussato Ferreira", "J2"],
+  ["Luísa Campos Marin", "J2"],
+  ["Isabella Minatel Persson", "T2"],
+  ["Aimê Trevisan Machado", "T2"],
+  ["Amanda Tognolo Althmann", "T2"],
+  ["Felipe Vieira Medeiros", "T2"],
+  ["Heloisa Delfino da Costa", "T2"],
+  ["João Pedro Mendes de Oliveira", "T2"],
+  ["João Vitor Carvalho Lima", "T2"],
+  ["Luís Otávio Rigo Miguel", "T2"],
+  ["Manuela Cardoso de Freitas", "T2"],
+  ["Rafael Vieira Medeiros", "T2"],
+  ["Alice Domingues Ferreira", "T2"],
+  ["Alice Medeiros Caron", "T2"],
+  ["Gabriel Castilho Gallasch", "T2"],
+  ["Gabriela Martins Costa", "T2"],
+  ["Ian Cardoso Luz", "T2"],
+  ["Laura Neves Madureira", "T2"],
+  ["Lavínia Carmona Cunha", "T2"],
+  ["Maria Eduarda Ayumi Barbosa", "T2"],
+  ["Miguel Barboza Ferreira de Melo", "T2"],
+  ["Miguel Branco de Medeiros", "T2"],
+  ["Beatriz Mendes Parizotto", "T5"],
+  ["Beatriz Piccolo Sant'Anna Zemuner", "T5"],
+  ["Caio Giroto Vieira", "T5"],
+  ["Enzo Tamaru de Souza", "T5"],
+  ["Giovana Kalvan Itami", "T5"],
+  ["Sarah Yuki Gonçalves Peixoto", "T5"],
+  ["Julio Carvalho Soares Bicalho", "T5"],
+  ["Felipe Moura Ioricci", "T3"],
+  ["Isabella Minako Alberton", "T3"],
+  ["Isabella Nunes Tombini", "T3"],
+  ["Kadu Fontaneli Ferro", "T3"],
+  ["Laura Rosolem Martins", "T3"],
+  ["Pedro Almeida Magalhães e Silva", "T3"],
+  ["Rafael Kyono Naves", "T3"],
+  ["Samuel Baldoria Voltan", "T3"],
+  ["Victor Ferrari de Oliveira", "T3"],
+  ["Angelina Varanda Machado", "T3"],
+  ["Beatriz Angelucci Maciel", "T3"],
+  ["Clara Luisa Ramos da Cruz", "T3"],
+  ["Giovanna Fernandes Almeida", "T3"],
+  ["Guilherme Lourencetti Scalisso", "T3"],
+  ["Laís Barbosa Martinez", "T3"],
+  ["Leticia Borges Chionha", "T3"],
+  ["Leticia Uchoa Marques", "T3"],
+  ["Manuela Nascimento Silva de Tullio Ferreira", "T3"],
+  ["Miguel Penachin Ruzza", "T3"],
+  ["Murilo Linhares Alves", "T3"],
+  ["Rafaela Alves Correa", "T3"],
+  ["Guilherme Lyrio Bragança", "T3"],
+  ["Guilherme Rocha Ribeiro", "T3"],
+  ["Maria Clara Quaiatti", "T3"],
+  ["Samuel Casado Mastrodi", "T3"],
+  ["Arthur da Silva Casarin", "T4"],
+  ["Caio Silva Souza", "T4"],
+  ["Gabriela Stort Campos", "T4"],
+  ["Helena Bastos Nogueira Carreira", "T4"],
+  ["Helena Solana Almeida", "T4"],
+  ["Letícia Manuela C. Oliviére", "T4"],
+  ["Valentina Gomes Machado", "T4"],
+  ["Antonia Bertoni Ferrari", "J"],
+  ["Bárbara Fábio Rigo", "J"],
+  ["Cecilia Gorino Mason", "J"],
+  ["Gabriel Resende Ribeiro", "J"],
+  ["João Gabriel Leitão Soragni", "J"],
+  ["João Pedro Baganha", "J"],
+  ["Manuella Paschoaleto", "J"],
+  ["Marina Bertucci Lourençon Silva", "J"],
+  ["Ana Luiza de Oliveira Varanda", "J1"],
+  ["Isabela Favaro", "J1"],
+  ["José Bernardo Bassani", "J1"],
+  ["Luiza Romeiro de Almeida", "J1"],
+  ["Melissa Perallis Salmazo", "J1"],
+  ["Pedro Henrique Rigo Miguel", "J1"],
+  ["Pedro Victoriano Alves", "J1"],
+  ["Miguel Vieira Almeida", "J1"],
+  ["Arthur Miguel Carvalho Lima", "J1"],
+  ["Beatriz Gasparoni Cardoso", "J1"],
+  ["Carolina Alves Corrêa", "J1"],
+  ["Isabela Keiko Guima", "J1"],
+  ["Ítalo Sartor Salvador", "J1"],
+  ["Laura dos Santos Magalhães", "J1"],
+  ["Matheus Zuccherato Gil", "J1"],
+  ["Alice Borges Ruzza Dalben", "K2"],
+  ["Gabriel Lima da Silva", "K2"],
+  ["Luiz Marques de Oliveira Dalbem", "K2"],
+  ["Otávio de Moraes Furtado", "K2"],
+  ["Tiago Duclos Trindade De Andrade", "K2"],
+  ["Caio Carvalho Bordin", "J1"],
+  ["Gabriel Pereira Lima", "J1"],
+  ["Manuela Mendes Cavagna", "J1"],
+  ["Maria Cecilia Carvalho Bordin", "J1"],
+  ["Mateus de Aragão Freire Ferreira Finger", "J1"],
+  ["Murilo Fernandes Floriano", "J1"],
+  ["Vinicius Ferreira França de Oliveira", "J1"],
+  ["Alice Sanches Santos Bonifácio Romera", "J1"],
+  ["Lucas Bueno Cosme De Oliveira", "J1"],
+  ["Elisa Guadagnini Araújo", "T2"],
+  ["Julia Milena Feijó de Carvalho", "T2"],
+  ["Luiza Carvalho Malia", "T2"],
+  ["Rafaela Sanches Rosa", "T2"],
+  ["Guilherme de Luca Lima", "T3"],
+  ["Affonso Rezende Ersching", "K2"],
+  ["Alessandro Tinoco Menezes", "K2"],
+  ["Karen Bernadette Mendonça Convento", "K2"],
+  ["Larissa Chahine Kairis Antonio", "K2"],
+  ["Lorena Delfino da Costa", "K2"],
+  ["Beatriz Castilho Gallasch", "K2"],
+  ["Maya Machado de Souza", "K2"],
+  ["Milena Ferreira Cassano", "K2"],
+  ["Rafaela Tonon Pietrobon", "K2"],
+  ["Davi Santos Damasceno", "K2"],
+  ["Felipe Augusto Pavan D. Filho", "K2"],
+  ["Tomás Zuzi Bardin", "K2"],
+  ["Enrico Augusto Rodrigues de Azevedo", "T6"],
+  ["Giovana Vitorio do Nascimento", "T6"],
+  ["Helena Brantegani Girardelli", "T6"],
+  ["Hélio Torres Soares", "T6"],
+  ["Henrique Oliveira Munsignatti", "T6"]
+];
+
+const MAPA_ALUNOS_OFICIAIS = new Map();
+const OFICIAIS_POR_ESTAGIO = Object.fromEntries(['K1', 'K2', 'J', 'J1', 'J2', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6'].map(e => [e, []]));
+ALUNOS_OFICIAIS.forEach(([n, e]) => {
+  const norm = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9' -]/g, ' ').replace(/\s+/g, ' ').trim();
+  const obj = { nome: n, estagio: e, chave: norm };
+  MAPA_ALUNOS_OFICIAIS.set(norm, obj);
+  if (OFICIAIS_POR_ESTAGIO[e]) OFICIAIS_POR_ESTAGIO[e].push(obj);
+});
+
+// Ordem fixa dos estágios (não altere)
+const ESTAGIOS = ['K1', 'K2', 'J', 'J1', 'J2', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6'];
+const ESTAGIOS_VALIDOS = new Set(ESTAGIOS);
+
+const BASE_ESPERADA = 204;            // total de alunos da escola
+const LIMITE_CRITICA_PADRAO = 3;      // Turma Crítica: inscritos <= este número
+const DATA_ENCERRAMENTO = new Date(2026, 9, 23); // 23/10/2026 (mês 9 = outubro)
+
+// Chaves do localStorage (tudo fica apenas neste navegador)
+const CHAVE_CONFIG = 'rbp-halloween-2026:config-v2';
+const CHAVE_DADOS  = 'rbp-halloween-2026:dados';
+const CHAVE_PREF   = 'rbp-halloween-2026:pref';
+
+const CORES = {
+  laranja: '#FF7A1A',
+  laranjaHover: '#FF9A4D',
+  vermelho: '#E30613',
+  vermelhoHover: '#FF2B38',
+  textoCritico: '#FF8A90',
+  texto: '#EDE6FB',
+  textoSuave: '#C7B9E6',
+  grade: 'rgba(237, 230, 251, .09)'
+};
+const FONTE_DADOS = '"Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui, sans-serif';
+const REDUZIR_MOVIMENTO = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* =====================================================================
+   2) ESTADO DA APLICAÇÃO
+   ===================================================================== */
+const estado = {
+  config: { base: { ...BASE_POR_ESTAGIO }, limite: LIMITE_CRITICA_PADRAO },
+  registros: [],      // inscritos válidos e únicos: { nome, estagio, chaveNome }
+  revisar: [],        // linhas não contadas: { linha, motivo, n }
+  relatorio: null,    // resumo da última importação
+  exemplo: false,     // true quando os dados exibidos são fictícios
+  atualizadoEm: null,
+  ordenacao: 'estagios',
+  mascarar: true,
+  salvarLista: true
+};
+
+/* =====================================================================
+   3) UTILITÁRIOS
+   ===================================================================== */
+const $ = (sel, raiz = document) => raiz.querySelector(sel);
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const semAcentos = (s) => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const pct = (v) => (Number.isFinite(v) ? v : 0).toFixed(1) + '%';          // sempre 1 casa decimal, ex.: 17.1%
+const alunosTxt = (n) => (n === 1 ? '1 aluno' : `${n} alunos`);              // singular para 1
+const soma = (arr) => arr.reduce((a, b) => a + b, 0);
+
+/** Normaliza o estágio: ignora maiúsculas/minúsculas, espaços e hífens ("t 4", "T-4", "t4" → "T4"). */
+function normalizarEstagio(txt) {
+  return semAcentos(txt).toUpperCase().replace(/[\s\-–—_.]/g, '');
+}
+
+/** Normaliza o nome para detectar duplicados (sem acento, minúsculas, espaços simples). */
+function normalizarNome(nome) {
+  return semAcentos(nome).toLowerCase().replace(/[^a-z0-9' -]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+/** Oculta parcialmente um nome: "Alice Almeida" → "Al••• A." */
+function mascararNome(nome) {
+  const partes = String(nome).trim().split(/\s+/).filter(Boolean);
+  if (!partes.length) return '';
+  const [primeiro, ...resto] = partes;
+  const ini = primeiro.slice(0, 2) + '•••';
+  const conectivos = new Set(['de', 'da', 'do', 'das', 'dos', 'e']);
+  const iniciais = resto.filter(p => !conectivos.has(p.toLowerCase())).map(p => p[0].toUpperCase() + '.');
+  return [ini, ...iniciais].join(' ');
+}
+const exibirNome = (nome) => (estado.mascarar ? mascararNome(nome) : nome);
+
+function dataHoraBR(d) {
+  return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function debounce(fn, ms) {
+  let t;
+  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+// localStorage com proteção (alguns navegadores bloqueiam em arquivos locais)
+const armazenamento = {
+  ler(chave) { try { return JSON.parse(localStorage.getItem(chave)); } catch (e) { return null; } },
+  gravar(chave, valor) { try { localStorage.setItem(chave, JSON.stringify(valor)); return true; } catch (e) { return false; } },
+  remover(chave) { try { localStorage.removeItem(chave); } catch (e) { /* ignora */ } }
+};
+
+/* =====================================================================
+   4) LEITURA DA LISTA (PARSER)
+   ===================================================================== */
+const TERMOS_NOME = new Set(['NOME', 'NOMES', 'ALUNO', 'ALUNA', 'NOMEDOALUNO', 'NOMECOMPLETO', 'ESTUDANTE', 'NOMEDOESTUDANTE']);
+const TERMOS_ESTAGIO = new Set(['ESTAGIO', 'TURMA', 'NIVEL', 'ESTAGIODOALUNO', 'CLASSE']);
+
+/** Detecta linha de cabeçalho, ex.: "Nome;Estágio". */
+function ehCabecalho(partes) {
+  const n = partes.map(p => semAcentos(p).toUpperCase().replace(/[^A-Z]/g, ''));
+  return n.some(x => TERMOS_NOME.has(x)) && n.some(x => TERMOS_ESTAGIO.has(x));
+}
+
+/** Divide a linha pelo separador (prioridade: TAB, ponto e vírgula, vírgula, " - "). */
+function dividirLinha(linha) {
+  if (linha.includes('\t')) return linha.split('\t');
+  if (linha.includes(';')) return linha.split(';');
+  if (linha.includes(',')) return linha.split(',');
+  if (/\s[-–—]\s/.test(linha)) return linha.split(/\s+[-–—]\s+/); // hífen com espaços = separador; "T-4" continua inteiro
+  return null;
+}
+
+const limparCampo = (s) => s.trim().replace(/^["']+|["']+$/g, '').trim();
+
+/** Interpreta uma linha. Retorna { tipo: 'ok' | 'revisar' | 'cabecalho', ... } */
+function interpretarLinha(original) {
+  const linha = original.replace(/^\uFEFF/, '').trim();
+  if (!linha) return null;
+
+  // Se a linha for apenas o nome e constar na base oficial da escola, identifica o estágio automaticamente
+  const linhaNorm = normalizarNome(linha);
+  if (MAPA_ALUNOS_OFICIAIS.has(linhaNorm)) {
+    const ofc = MAPA_ALUNOS_OFICIAIS.get(linhaNorm);
+    return { tipo: 'ok', nome: ofc.nome, estagio: ofc.estagio };
+  }
+
+  const brutas = dividirLinha(linha);
+  if (!brutas) {
+    return { tipo: 'revisar', motivo: 'Formato não reconhecido (use Nome;Estágio ou nome completo)' };
+  }
+
+  const partes = brutas.map(limparCampo).filter(p => p !== '');
+  if (ehCabecalho(partes)) return { tipo: 'cabecalho' };
+  if (partes.length < 2) {
+    const p0Norm = normalizarNome(partes[0]);
+    if (MAPA_ALUNOS_OFICIAIS.has(p0Norm)) {
+      const ofc = MAPA_ALUNOS_OFICIAIS.get(p0Norm);
+      return { tipo: 'ok', nome: ofc.nome, estagio: ofc.estagio };
+    }
+    return { tipo: 'revisar', motivo: 'Falta o nome ou o estágio' };
+  }
+
+  const ultimo = normalizarEstagio(partes[partes.length - 1]);
+  const primeiro = normalizarEstagio(partes[0]);
+  let nome, estagio;
+
+  if (ESTAGIOS_VALIDOS.has(ultimo)) {          // Nome;Estágio
+    estagio = ultimo;
+    nome = partes.slice(0, -1).join(' ');
+  } else if (ESTAGIOS_VALIDOS.has(primeiro)) { // Estágio;Nome
+    estagio = primeiro;
+    nome = partes.slice(1).join(' ');
+  } else {
+    // Se o estágio não foi reconhecido mas o nome está na base oficial, usa o estágio cadastrado
+    const t1 = normalizarNome(partes.slice(0, -1).join(' '));
+    const t2 = normalizarNome(partes.slice(1).join(' '));
+    if (MAPA_ALUNOS_OFICIAIS.has(t1)) {
+      const ofc = MAPA_ALUNOS_OFICIAIS.get(t1);
+      return { tipo: 'ok', nome: ofc.nome, estagio: ofc.estagio };
+    }
+    if (MAPA_ALUNOS_OFICIAIS.has(t2)) {
+      const ofc = MAPA_ALUNOS_OFICIAIS.get(t2);
+      return { tipo: 'ok', nome: ofc.nome, estagio: ofc.estagio };
+    }
+    return { tipo: 'revisar', motivo: `Estágio não reconhecido: "${partes[partes.length - 1]}"` };
+  }
+
+  nome = nome.replace(/\s+/g, ' ').trim();
+  if (!/[A-Za-zÀ-ÿ]/.test(nome)) return { tipo: 'revisar', motivo: 'Nome vazio ou inválido' };
+  return { tipo: 'ok', nome, estagio };
+}
+
+/**
+ * Processa um texto com várias linhas.
+ * @param {string} texto  conteúdo colado/importado
+ * @param {Array} existentes  registros já na lista (para "Adicionar à lista")
+ */
+function processarTexto(texto, existentes) {
+  const vistos = new Set(existentes.map(r => r.chaveNome + '|' + r.estagio));
+  const novos = [], duplicados = [], revisar = [];
+  let cabecalhos = 0, lidas = 0;
+
+  texto.split(/\r\n|\n|\r/).forEach((orig, idx) => {
+    if (!orig.trim()) return; // linhas em branco são ignoradas
+    lidas++;
+    const r = interpretarLinha(orig);
+    if (r.tipo === 'cabecalho') { cabecalhos++; return; }
+    if (r.tipo === 'revisar') { revisar.push({ linha: orig.trim(), motivo: r.motivo, n: idx + 1 }); return; }
+
+    const reg = { nome: r.nome, estagio: r.estagio, chaveNome: normalizarNome(r.nome) };
+    const chave = reg.chaveNome + '|' + reg.estagio;
+    if (vistos.has(chave)) {                      // mesmo nome + mesmo estágio: conta uma vez só
+      duplicados.push({ nome: r.nome, estagio: r.estagio, n: idx + 1 });
+      return;
+    }
+    vistos.add(chave);
+    novos.push(reg);
+  });
+
+  return { novos, duplicados, revisar, cabecalhos, lidas };
+}
+
+/** Mesmo nome em estágios diferentes → "possível duplicidade" (conta, mas sinaliza). */
+function possiveisDuplicidades() {
+  const mapa = new Map();
+  estado.registros.forEach(r => {
+    if (!mapa.has(r.chaveNome)) mapa.set(r.chaveNome, { nome: r.nome, estagios: new Set() });
+    mapa.get(r.chaveNome).estagios.add(r.estagio);
+  });
+  return [...mapa.entries()]
+    .filter(([, v]) => v.estagios.size > 1)
+    .map(([chave, v]) => ({ chave, nome: v.nome, estagios: ESTAGIOS.filter(e => v.estagios.has(e)) }));
+}
+
+/* =====================================================================
+   5) CÁLCULOS
+   ===================================================================== */
+function calcular() {
+  const limite = estado.config.limite;
+  const contagem = Object.fromEntries(ESTAGIOS.map(e => [e, 0]));
+  estado.registros.forEach(r => { contagem[r.estagio]++; });
+
+  const totalInscritos = soma(Object.values(contagem));
+  const baseTotal = soma(ESTAGIOS.map(e => estado.config.base[e]));
+
+  const linhas = ESTAGIOS.map((e, i) => {
+    const base = estado.config.base[e];
+    const inscritos = contagem[e];
+    return {
+      estagio: e,
+      ordem: i,
+      base,
+      inscritos,
+      oportunidades: Math.max(0, base - inscritos),
+      adesao: base > 0 ? (inscritos / base) * 100 : 0,                          // inscritos / base do estágio
+      participacao: totalInscritos > 0 ? (inscritos / totalInscritos) * 100 : 0, // inscritos / total de inscritos
+      critica: inscritos <= limite,                                              // 0 inscritos também é crítica
+      excedente: inscritos > base
+    };
+  });
+
+  const oportunidades = soma(linhas.map(l => l.oportunidades)); // igual à soma da tabela
+  const pctInscritos = baseTotal > 0 ? (totalInscritos / baseTotal) * 100 : 0;
+  const invariante = totalInscritos + oportunidades === baseTotal;
+  // Quando Inscritos + Oportunidades = Base, o % de oportunidades é o complemento (soma exatamente 100.0%)
+  const pctOport = baseTotal > 0
+    ? (invariante ? Math.max(0, 100 - Number(pctInscritos.toFixed(1))) : (oportunidades / baseTotal) * 100)
+    : 0;
+
+  return {
+    linhas, totalInscritos, baseTotal, oportunidades, pctInscritos, pctOport, invariante,
+    criticas: linhas.filter(l => l.critica),
+    excedentes: linhas.filter(l => l.excedente),
+    somaParticipacao: soma(linhas.map(l => Number(l.participacao.toFixed(1))))
+  };
+}
+
+/** Rótulo exato da barra: "K2 (12 alunos) 17.1%" ou "T4 (2 alunos - Turma Crítica) 2.9%". */
+function rotulo(l) {
+  const meio = l.critica ? `${alunosTxt(l.inscritos)} - Turma Crítica` : alunosTxt(l.inscritos);
+  return `${l.estagio} (${meio}) ${pct(l.participacao)}`;
+}
+
+function rotuloEmLinhas(l, modo, estreito) {
+  if (modo === 'horizontal') {
+    if (!estreito) return rotulo(l);
+    return l.critica
+      ? [`${l.estagio} (${alunosTxt(l.inscritos)} -`, `Turma Crítica) ${pct(l.participacao)}`]
+      : [`${l.estagio} (${alunosTxt(l.inscritos)})`, pct(l.participacao)];
+  }
+  return l.critica
+    ? [l.estagio, `(${alunosTxt(l.inscritos)} -`, 'Turma Crítica)', pct(l.participacao)]
+    : [l.estagio, `(${alunosTxt(l.inscritos)})`, pct(l.participacao)];
+}
+
+function ordenar(linhas) {
+  if (estado.ordenacao === 'inscritos') {
+    return [...linhas].sort((a, b) => b.inscritos - a.inscritos || a.ordem - b.ordem);
+  }
+  return linhas;
+}
+
+/* =====================================================================
+   6) RENDERIZAÇÃO
+   ===================================================================== */
+
+/** Animação leve de contagem nos números dos cards. */
+function animarNumero(el, valorFinal, decimais = 0, sufixo = '') {
+  const inicio = parseFloat(el.dataset.valor || '0');
+  el.dataset.valor = String(valorFinal);
+  cancelAnimationFrame(el._raf);
+  if (REDUZIR_MOVIMENTO || inicio === valorFinal) { el.textContent = valorFinal.toFixed(decimais) + sufixo; return; }
+  const duracao = 700, t0 = performance.now();
+  const passo = (t) => {
+    const p = Math.min(1, (t - t0) / duracao);
+    const e = 1 - Math.pow(1 - p, 3); // ease-out
+    el.textContent = (inicio + (valorFinal - inicio) * e).toFixed(decimais) + sufixo;
+    if (p < 1) el._raf = requestAnimationFrame(passo);
+  };
+  el._raf = requestAnimationFrame(passo);
+}
+
+/** Contagem regressiva para o encerramento das inscrições. */
+function renderPrazo() {
+  const hoje = new Date();
+  const hojeSemHora = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+  const dias = Math.round((DATA_ENCERRAMENTO - hojeSemHora) / 86400000);
+  const el = $('#contagem'), txt = $('#contagemTexto');
+  el.classList.remove('urgente', 'encerrado');
+
+  if (dias < 0) {
+    el.classList.add('encerrado');
+    txt.innerHTML = '<strong>Inscrições encerradas</strong> (23/10)';
+  } else if (dias === 0) {
+    el.classList.add('urgente');
+    txt.innerHTML = '<strong>Último dia!</strong> As inscrições encerram hoje (23/10)';
+  } else if (dias === 1) {
+    el.classList.add('urgente');
+    txt.innerHTML = 'Falta <strong>1 dia</strong> para o encerramento das inscrições (23/10)';
+  } else {
+    if (dias <= 3) el.classList.add('urgente');
+    txt.innerHTML = `Faltam <strong>${dias} dias</strong> para o encerramento das inscrições (23/10)`;
+  }
+}
+
+function renderCards(c) {
+  animarNumero($('#valBase'), c.baseTotal);
+  animarNumero($('#valInscritos'), c.totalInscritos);
+  animarNumero($('#valOport'), c.oportunidades);
+  $('#pctInscritos').textContent = pct(c.pctInscritos);
+  $('#pctInscritosGrande').textContent = pct(c.pctInscritos);
+  $('#pctOport').textContent = pct(c.pctOport);
+  $('#pctOportGrande').textContent = pct(c.pctOport);
+
+  const largura = Math.min(100, c.pctInscritos);
+  $('#barraInscritos').style.width = largura + '%';
+  const prog = $('#progresso');
+  prog.setAttribute('aria-valuenow', largura.toFixed(1));
+  prog.setAttribute('aria-valuetext', `${c.totalInscritos} de ${c.baseTotal} alunos (${pct(c.pctInscritos)})`);
+  $('#legendaMeta').textContent = `Meta: ${c.baseTotal}`;
+
+  const chip = $('#chipBase');
+  if (c.baseTotal === BASE_ESPERADA) {
+    chip.className = 'chip-base ok';
+    chip.textContent = `✓ Confere com ${BASE_ESPERADA}`;
+  } else {
+    chip.className = 'chip-base erro';
+    chip.textContent = `⚠ Diferente de ${BASE_ESPERADA} — revise as Configurações`;
+  }
+
+  $('#metaBatida').hidden = !(c.baseTotal > 0 && c.oportunidades === 0 && c.totalInscritos >= c.baseTotal);
+}
+
+/** Avisos gerais (nunca exibem nomes de alunos). */
+function renderAvisos(c) {
+  const itens = [];
+  const add = (tipo, ico, html) => itens.push(`<div class="aviso aviso-${tipo}"><span class="ico" aria-hidden="true">${ico}</span><p>${html}</p></div>`);
+
+  if (estado.exemplo) {
+    add('info', '🧪', '<strong>Dados fictícios de exemplo.</strong> Cole a lista real em <a href="#entradaDados">Entrada de dados</a> e clique em “Atualizar dashboard”.');
+  }
+  if (c.baseTotal !== BASE_ESPERADA) {
+    add('alerta', '⚠️', `A soma das bases por estágio é <strong>${c.baseTotal}</strong>, diferente de <strong>${BASE_ESPERADA}</strong>. Revise em <a href="#config" data-abrir-config>Configurações</a>.`);
+  }
+  if (c.excedentes.length) {
+    const lista = c.excedentes.map(l => `${l.estagio} (${l.inscritos} inscritos, base ${l.base})`).join(', ');
+    add('alerta', '⚠️', `Há estágio com mais inscritos que a base: ${esc(lista)}. Ajuste a base em <a href="#config" data-abrir-config>Configurações</a>.`);
+  }
+  if (estado.revisar.length) {
+    add('erro', '🔎', `<strong>${estado.revisar.length} ${estado.revisar.length === 1 ? 'linha não foi contada' : 'linhas não foram contadas'}</strong> e ${estado.revisar.length === 1 ? 'precisa' : 'precisam'} de revisão. <a href="#caixaRevisar">Ver caixa “Revisar”</a>.`);
+  }
+  const dups = estado.relatorio ? estado.relatorio.duplicados.length : 0;
+  if (dups) {
+    add('alerta', '♻️', `${dups} ${dups === 1 ? 'duplicado foi removido' : 'duplicados foram removidos'} na última importação (contados uma vez). <a href="#caixaDuplicados">Ver detalhes</a>.`);
+  }
+  const possiveis = possiveisDuplicidades().length;
+  if (possiveis) {
+    add('alerta', '👥', `${possiveis} ${possiveis === 1 ? 'nome aparece' : 'nomes aparecem'} em mais de um estágio (possível duplicidade). <a href="#caixaPossiveis">Ver detalhes</a>.`);
+  }
+  if (c.totalInscritos === 0) {
+    add('info', '🕸️', 'Nenhuma inscrição registrada ainda. Todas as turmas aparecem como <strong>Turma Crítica</strong>.');
+  } else if (c.baseTotal > 0 && c.oportunidades === 0 && c.totalInscritos >= c.baseTotal) {
+    add('sucesso', '🎃', '<strong>Meta batida!</strong> Todos os alunos da base estão inscritos na Halloween Party.');
+  }
+  $('#avisos').innerHTML = itens.join('');
+}
+
+/** Estágios prioritários para reforçar a divulgação (do menor para o maior número de inscritos). */
+function renderPrioridade(c) {
+  const el = $('#prioridade');
+  if (!c.criticas.length) {
+    el.innerHTML = '<span class="selo selo-ok">✓ Nenhuma Turma Crítica</span>';
+    return;
+  }
+  const ordenadas = [...c.criticas].sort((a, b) => a.inscritos - b.inscritos || a.ordem - b.ordem);
+  el.innerHTML = `<strong>Reforçar divulgação (${ordenadas.length} ${ordenadas.length === 1 ? 'Turma Crítica' : 'Turmas Críticas'}):</strong>` +
+    ordenadas.map(l => `<span class="chip-prior">${l.estagio} · ${alunosTxt(l.inscritos)}</span>`).join('');
+}
+
+/* ---------- Gráfico (Chart.js) ---------- */
+let grafico = null, modoGrafico = null, estreitoGrafico = null, linhasGrafico = [];
+
+function caminhoArredondado(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/** Desenha o selo "Turma Crítica". ancora 'centro' (barra vertical) ou 'esquerda' (barra horizontal). */
+function desenharSelo(ctx, x, y, ancora, larguraMax) {
+  let linhas = ['Turma Crítica'];
+  ctx.font = `700 10.5px ${FONTE_DADOS}`;
+  let w = ctx.measureText(linhas[0]).width + 14;
+  let lh = 12;
+  if (ancora === 'centro' && w > larguraMax - 4) { // não cabe: selo em duas linhas
+    linhas = ['TURMA', 'CRÍTICA'];
+    ctx.font = `800 9px ${FONTE_DADOS}`;
+    w = Math.max(...linhas.map(t => ctx.measureText(t).width)) + 10;
+    lh = 10;
+  }
+  const h = linhas.length * lh + 8;
+  const x0 = ancora === 'centro' ? x - w / 2 : x;
+  const y0 = ancora === 'centro' ? y - h : y - h / 2;
+  caminhoArredondado(ctx, x0, y0, w, h, Math.min(9, h / 2));
+  ctx.fillStyle = CORES.vermelho;
+  ctx.fill();
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = 'rgba(255,255,255,.4)';
+  ctx.stroke();
+  ctx.fillStyle = '#FFFFFF';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  linhas.forEach((t, i) => ctx.fillText(t, x0 + w / 2, y0 + 4 + lh * i + lh / 2 + .5));
+}
+
+/** Plugin: escreve o valor de cada barra e o selo de Turma Crítica. */
+const pluginRotulos = {
+  id: 'rotulosBarras',
+  afterDatasetsDraw(chart) {
+    const meta = chart.getDatasetMeta(0);
+    const ctx = chart.ctx;
+    const horizontal = chart.options.indexAxis === 'y';
+    const area = chart.chartArea;
+    const n = meta.data.length || 1;
+    const slot = horizontal ? (area.bottom - area.top) / n : (area.right - area.left) / n;
+    ctx.save();
+    meta.data.forEach((bar, i) => {
+      const l = linhasGrafico[i];
+      if (!l) return;
+      const p = bar.getProps(['x', 'y', 'base', 'width', 'height'], false);
+
+      // Marcador fino para barras com 0 inscritos (continuam visíveis)
+      if (l.inscritos === 0) {
+        ctx.fillStyle = CORES.vermelho;
+        if (horizontal) ctx.fillRect(p.base, p.y - p.height / 2, 3, p.height);
+        else ctx.fillRect(p.x - p.width / 2, p.base - 3, p.width, 3);
+      }
+
+      ctx.font = `700 13px ${FONTE_DADOS}`;
+      ctx.fillStyle = '#FFFFFF';
+      const valor = String(l.inscritos);
+      if (horizontal) {
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        const xv = Math.max(p.x, p.base) + 8;
+        ctx.fillText(valor, xv, p.y);
+        if (l.critica && !estreitoGrafico) desenharSelo(ctx, xv + ctx.measureText(valor).width + 8, p.y, 'esquerda', 999);
+      } else {
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        const topo = Math.min(p.y, p.base);
+        ctx.fillText(valor, p.x, topo - 6);
+        if (l.critica) desenharSelo(ctx, p.x, topo - 24, 'centro', slot);
+      }
+    });
+    ctx.restore();
+  }
+};
+
+function escalas(modo, maxValor, estreito) {
+  const categoria = {
+    type: 'category',
+    ticks: {
+      autoSkip: false, maxRotation: 0, minRotation: 0, padding: 6,
+      color: (ctx) => (linhasGrafico[ctx.index] && linhasGrafico[ctx.index].critica ? CORES.textoCritico : CORES.texto),
+      font: (ctx) => ({ family: FONTE_DADOS, size: estreito ? 11 : 12, weight: linhasGrafico[ctx.index] && linhasGrafico[ctx.index].critica ? '700' : '500', lineHeight: 1.25 })
+    },
+    grid: { display: false },
+    border: { color: 'rgba(237,230,251,.25)' }
+  };
+  const valor = {
+    type: 'linear', beginAtZero: true,
+    suggestedMax: Math.max(4, Math.ceil(maxValor * 1.08)), // gráfico legível mesmo com 0 inscritos
+    ticks: { precision: 0, color: CORES.textoSuave, font: { size: 11 } },
+    grid: { color: CORES.grade },
+    border: { display: false },
+    title: { display: true, text: 'Nº de inscritos', color: CORES.textoSuave, font: { size: 11, weight: '600' } }
+  };
+  return modo === 'horizontal' ? { x: valor, y: categoria } : { x: categoria, y: valor };
+}
+
+function renderListaRotulos(linhas, maxValor, visivel) {
+  const ul = $('#graficoLista');
+  ul.className = visivel ? 'grafico-fallback' : 'sr-only';
+  ul.innerHTML = linhas.map(l => {
+    const largura = maxValor > 0 ? (l.inscritos / maxValor) * 100 : 0;
+    return `<li class="${l.critica ? 'critica' : ''}"><span>${esc(rotulo(l))}</span>${visivel ? `<div class="barra" style="width:${largura}%"></div>` : ''}</li>`;
+  }).join('');
+}
+
+function renderGrafico(c) {
+  const wrap = $('#graficoWrap'), canvas = $('#grafico');
+  const linhas = ordenar(c.linhas);
+  linhasGrafico = linhas;
+  const maxValor = Math.max(0, ...linhas.map(l => l.inscritos));
+
+  // Plano B: sem internet o Chart.js não carrega; mostra barras simples em HTML.
+  if (typeof Chart === 'undefined') {
+    wrap.hidden = true;
+    renderListaRotulos(linhas, maxValor, true);
+    return;
+  }
+  renderListaRotulos(linhas, maxValor, false);
+
+  const largura = wrap.clientWidth || wrap.parentElement.clientWidth;
+  const modo = largura < 960 ? 'horizontal' : 'vertical'; // barras horizontais em telas menores
+  const estreito = largura < 520;
+  wrap.style.height = modo === 'horizontal' ? (linhas.length * 52 + 70) + 'px' : '470px';
+
+  const labels = linhas.map(l => rotuloEmLinhas(l, modo, estreito));
+  const dados = linhas.map(l => l.inscritos);
+  const cores = linhas.map(l => (l.critica ? CORES.vermelho : CORES.laranja));
+  const coresHover = linhas.map(l => (l.critica ? CORES.vermelhoHover : CORES.laranjaHover));
+
+  canvas.setAttribute('aria-label', 'Inscritos por estágio: ' + linhas.map(rotulo).join('; '));
+
+  if (grafico && modoGrafico === modo && estreitoGrafico === estreito) {
+    grafico.data.labels = labels;
+    const ds = grafico.data.datasets[0];
+    ds.data = dados;
+    ds.backgroundColor = cores;
+    ds.hoverBackgroundColor = coresHover;
+    grafico.options.scales = escalas(modo, maxValor, estreito);
+    grafico.update();
+    return;
+  }
+
+  if (grafico) grafico.destroy();
+  modoGrafico = modo;
+  estreitoGrafico = estreito;
+
+  Chart.defaults.font.family = FONTE_DADOS;
+  Chart.defaults.color = CORES.texto;
+
+  grafico = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Inscritos',
+        data: dados,
+        backgroundColor: cores,
+        hoverBackgroundColor: coresHover,
+        borderRadius: 6,
+        borderSkipped: 'start',
+        maxBarThickness: 58,
+        categoryPercentage: 0.74,
+        barPercentage: 0.9
+      }]
+    },
+    options: {
+      indexAxis: modo === 'horizontal' ? 'y' : 'x',
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: REDUZIR_MOVIMENTO ? 0 : 450, easing: 'easeOutCubic' },
+      layout: { padding: modo === 'vertical' ? { top: 58, right: 8, left: 4 } : { top: 4, left: 4, right: estreito ? 28 : 124 } },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#140a24',
+          borderColor: CORES.laranja,
+          borderWidth: 1,
+          titleColor: '#FFFFFF',
+          bodyColor: CORES.texto,
+          titleFont: { size: 13, weight: '700' },
+          bodyFont: { size: 12 },
+          padding: 12,
+          displayColors: false,
+          callbacks: {
+            title: (itens) => {
+              const l = linhasGrafico[itens[0].dataIndex];
+              return `${l.estagio}${l.critica ? ' · Turma Crítica' : ''}`;
+            },
+            label: (item) => {
+              const l = linhasGrafico[item.dataIndex];
+              return [
+                `Inscritos no estágio: ${l.inscritos} de ${l.base} alunos (${pct(l.adesao)} da turma)`,
+                `Oportunidades restantes: ${l.oportunidades} alunos (${pct(l.base > 0 ? (l.oportunidades / l.base) * 100 : 0)} da turma)`,
+                `Participação no evento: ${pct(l.participacao)} de todos os inscritos`
+              ];
+            }
+          }
+        }
+      },
+      scales: escalas(modo, maxValor)
+    },
+    plugins: [pluginRotulos]
+  });
+}
+
+/* ---------- Tabela ---------- */
+function renderTabela(c) {
+  const linhas = ordenar(c.linhas);
+  $('#tabelaCorpo').innerHTML = linhas.map(l => `
+    <tr class="${l.critica ? 'linha-critica' : ''}">
+      <th scope="row">${l.estagio}</th>
+      <td class="num">${l.base}</td>
+      <td class="num">${l.inscritos}${l.excedente ? '<span class="excedente" title="Mais inscritos que a base">acima da base</span>' : ''}</td>
+      <td class="num">${l.oportunidades}</td>
+      <td class="num"><div class="adesao"><span>${pct(l.adesao)} <small style="color:var(--faint);font-weight:600;font-size:.82em">(${l.inscritos}/${l.base})</small></span><span class="mini" aria-hidden="true"><i style="width:${Math.min(100, l.adesao)}%"></i></span></div></td>
+      <td>${l.critica ? '<span class="selo">Turma Crítica</span>' : '<span class="selo selo-ok">Ok</span>'}</td>
+    </tr>`).join('');
+
+  const qtdCriticas = c.criticas.length;
+  $('#tabelaTotal').innerHTML = `
+    <tr>
+      <th scope="row">Total</th>
+      <td class="num">${c.baseTotal}</td>
+      <td class="num">${c.totalInscritos}</td>
+      <td class="num">${c.oportunidades}</td>
+      <td class="num">${pct(c.pctInscritos)} <small style="color:var(--faint);font-weight:600;font-size:.82em">(${c.totalInscritos}/${c.baseTotal})</small></td>
+      <td>${qtdCriticas} ${qtdCriticas === 1 ? 'Turma Crítica' : 'Turmas Críticas'}</td>
+    </tr>`;
+
+  // Conferência automática das regras
+  const v = [];
+  v.push(c.invariante
+    ? `<span class="ok">✓ Inscritos (${c.totalInscritos}) + Oportunidades (${c.oportunidades}) = Base total (${c.baseTotal})</span>`
+    : `<span class="erro">⚠ Inscritos (${c.totalInscritos}) + Oportunidades (${c.oportunidades}) ≠ Base total (${c.baseTotal}): há estágio com mais inscritos que a base</span>`);
+  if (c.totalInscritos > 0) {
+    const s = c.somaParticipacao;
+    const ok = Math.abs(s - 100) <= 0.6; // tolerância de arredondamento (11 estágios × 0,05)
+    v.push(`<span class="${ok ? 'ok' : 'erro'}">${ok ? '✓' : '⚠'} Soma das participações por estágio: ${s.toFixed(1)}%${Math.abs(s - 100) > 0.001 ? ' (diferença de arredondamento)' : ''}</span>`);
+  } else {
+    v.push('<span>Participação por estágio: 0.0% (sem inscritos)</span>');
+  }
+  $('#verificacao').innerHTML = v.join('');
+}
+
+/* ---------- Relatório da importação ---------- */
+function renderRelatorio() {
+  const r = estado.relatorio;
+  $('#resumoImport').innerHTML = r
+    ? `<strong>${esc(r.modo)}</strong> em ${esc(r.quando)}${r.exemplo ? ' (dados de exemplo)' : ''}: ${r.lidas} ${r.lidas === 1 ? 'linha lida' : 'linhas lidas'} = <strong>${r.validas}</strong> ${r.validas === 1 ? 'válida' : 'válidas'} + ${r.duplicados.length} ${r.duplicados.length === 1 ? 'duplicada removida' : 'duplicadas removidas'} + ${r.revisarQtd} para revisar${r.cabecalhos ? ` + ${r.cabecalhos} ${r.cabecalhos === 1 ? 'cabeçalho ignorado' : 'cabeçalhos ignorados'}` : ''}. Total na lista: <strong>${estado.registros.length}</strong>.`
+    : 'Nenhuma importação ainda.';
+
+  // Caixa "Revisar": linha original + motivo (lista recolhida para não expor nomes na tela)
+  const cr = $('#caixaRevisar');
+  if (estado.revisar.length) {
+    cr.className = 'caixa revisar';
+    cr.innerHTML = `
+      <h3>🔎 Revisar <span class="contador">${estado.revisar.length}</span></h3>
+      <p>Estas linhas <strong>não foram contadas</strong>. Corrija o estágio (K1, K2, J, J1, J2, T1–T6) e importe novamente.</p>
+      <details><summary>Mostrar linhas originais</summary>
+        <ul>${estado.revisar.map(x => `<li><span class="nlinha">linha ${x.n}</span><code>${esc(x.linha.replace(/\t/g, ' ⇥ '))}</code><span class="motivo">${esc(x.motivo)}</span></li>`).join('')}</ul>
+      </details>`;
+  } else {
+    cr.className = 'caixa vazia';
+    cr.innerHTML = '<h3>✓ Revisar <span class="contador">0</span></h3><p>Nenhuma linha pendente de revisão.</p>';
+  }
+
+  // Duplicados removidos na última importação
+  const cd = $('#caixaDuplicados');
+  const dups = r ? r.duplicados : [];
+  cd.innerHTML = `
+    <h3>♻️ Duplicados removidos <span class="contador">${dups.length}</span></h3>
+    <p>Mesmo nome e mesmo estágio: contados uma única vez.</p>
+    ${dups.length ? `<details><summary>Mostrar duplicados</summary><ul>${dups.map(d => `<li><span class="nlinha">linha ${d.n}</span><code>${esc(exibirNome(d.nome))}</code><span>${d.estagio}</span></li>`).join('')}</ul></details>` : ''}`;
+
+  // Possível duplicidade: mesmo nome em estágios diferentes (contado, mas sinalizado)
+  const cp = $('#caixaPossiveis');
+  const poss = possiveisDuplicidades();
+  cp.innerHTML = `
+    <h3>👥 Possível duplicidade <span class="contador">${poss.length}</span></h3>
+    <p>Mesmo nome em estágios diferentes: foi contado em cada estágio. Confira se é o mesmo aluno.</p>
+    ${poss.length ? `<details><summary>Mostrar nomes</summary><ul>${poss.map(p => `<li><code>${esc(exibirNome(p.nome))}</code><span>${p.estagios.join(', ')}</span></li>`).join('')}</ul></details>` : ''}`;
+}
+
+/* ---------- Lista de inscritos e oportunidades por estágio ---------- */
+function renderLista() {
+  $('#qtdLista').textContent = estado.registros.length;
+  const det = $('#listaInscritos'), alvo = $('#listaConteudo');
+  if (!det.open) { alvo.innerHTML = ''; return; }
+  const filtro = $('#filtroEstagio').value;
+  const mostrarFaltantes = $('#chkMostrarFaltantes') && $('#chkMostrarFaltantes').checked;
+  const marcados = new Set(possiveisDuplicidades().map(p => p.chave));
+  const inscritosChaves = new Set(estado.registros.map(r => r.chaveNome));
+
+  alvo.innerHTML = ESTAGIOS.filter(e => !filtro || e === filtro).map(e => {
+    const regs = estado.registros.filter(r => r.estagio === e).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+    const oficiais = OFICIAIS_POR_ESTAGIO[e] || [];
+    const faltantes = oficiais.filter(o => !inscritosChaves.has(o.chave));
+    const itensInscritos = regs.map(r => `<li>${esc(exibirNome(r.nome))}${marcados.has(r.chaveNome) ? '<span class="tag-aviso" title="Mesmo nome em outro estágio">possível duplicidade</span>' : ''}</li>`).join('');
+    const itensFaltantes = faltantes.map(f => `<li style="color:var(--muted);opacity:.9">${esc(exibirNome(f.nome))}</li>`).join('');
+
+    return `<section class="grupo">
+      <h4>${e} <span>(${regs.length} de ${estado.config.base[e]} alunos · ${estado.config.base[e] > 0 ? ((regs.length / estado.config.base[e]) * 100).toFixed(1) : '0.0'}%)</span></h4>
+      <div style="margin-top:6px">
+        <strong style="font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--orange-2)">Inscritos (${regs.length}):</strong>
+        ${regs.length ? `<ol style="margin:4px 0 8px">${itensInscritos}</ol>` : '<p class="vazio" style="margin:4px 0 8px">Nenhum inscrito ainda</p>'}
+      </div>
+      ${mostrarFaltantes && faltantes.length ? `
+        <details style="margin-top:6px;border-top:1px dashed var(--border);padding-top:6px">
+          <summary style="font-size:.82rem;color:var(--yellow);cursor:pointer">Ainda não inscritos (${faltantes.length} oportunidades)</summary>
+          <ol style="margin:6px 0 0">${itensFaltantes}</ol>
+        </details>` : ''}
+    </section>`;
+  }).join('');
+}
+
+/* ---------- Configurações ---------- */
+function montarConfig() {
+  $('#gradeBases').innerHTML = ESTAGIOS.map(e => `
+    <div class="campo">
+      <label for="base-${e}">${e}</label>
+      <input type="number" id="base-${e}" data-estagio="${e}" min="0" step="1" inputmode="numeric">
+    </div>`).join('');
+  $('#filtroEstagio').insertAdjacentHTML('beforeend', ESTAGIOS.map(e => `<option value="${e}">${e}</option>`).join(''));
+}
+
+function preencherConfig() {
+  ESTAGIOS.forEach(e => { $(`#base-${e}`).value = estado.config.base[e]; });
+  $('#limite').value = estado.config.limite;
+  renderSomaBases();
+}
+
+function renderSomaBases() {
+  const total = soma(ESTAGIOS.map(e => estado.config.base[e]));
+  const el = $('#somaBases');
+  if (total === BASE_ESPERADA) {
+    el.className = 'soma-bases ok';
+    el.textContent = `✓ Soma das bases: ${total} (confere com ${BASE_ESPERADA})`;
+  } else {
+    el.className = 'soma-bases erro';
+    el.textContent = `⚠ Soma das bases: ${total} — diferente de ${BASE_ESPERADA} (${total > BASE_ESPERADA ? '+' : ''}${total - BASE_ESPERADA})`;
+  }
+  $('#descLimite').textContent = `Turma Crítica: até ${estado.config.limite} ${estado.config.limite === 1 ? 'inscrito' : 'inscritos'}.`;
+}
+
+function lerConfigDoFormulario() {
+  ESTAGIOS.forEach(e => {
+    const v = parseInt($(`#base-${e}`).value, 10);
+    estado.config.base[e] = Number.isFinite(v) && v >= 0 ? v : 0;
+  });
+  const lim = parseInt($('#limite').value, 10);
+  estado.config.limite = Number.isFinite(lim) && lim >= 0 ? lim : LIMITE_CRITICA_PADRAO;
+}
+
+/* ---------- Atualiza tudo ---------- */
+function atualizarTudo() {
+  const c = calcular();
+  renderCards(c);
+  renderAvisos(c);
+  renderPrioridade(c);
+  renderGrafico(c);
+  renderTabela(c);
+  renderRelatorio();
+  renderLista();
+  renderSomaBases();
+  $('#atualizadoEm').textContent = estado.atualizadoEm ? `Última atualização: ${dataHoraBR(new Date(estado.atualizadoEm))}` : '';
+  $('#anuncio').textContent = `Dashboard atualizado: ${c.totalInscritos} inscritos de ${c.baseTotal} alunos (${pct(c.pctInscritos)}). ${c.criticas.length} turmas críticas.`;
+}
+
+/* =====================================================================
+   7) PERSISTÊNCIA (somente localStorage deste navegador)
+   ===================================================================== */
+function salvarConfig() {
+  armazenamento.gravar(CHAVE_CONFIG, estado.config);
+}
+
+function carregarConfig() {
+  const salvo = armazenamento.ler(CHAVE_CONFIG);
+  if (!salvo || typeof salvo !== 'object') return;
+  ESTAGIOS.forEach(e => {
+    const v = salvo.base && Number(salvo.base[e]);
+    if (Number.isFinite(v) && v >= 0) estado.config.base[e] = Math.floor(v);
+  });
+  if (Number.isFinite(Number(salvo.limite)) && Number(salvo.limite) >= 0) estado.config.limite = Math.floor(Number(salvo.limite));
+}
+
+function salvarDados() {
+  if (!estado.salvarLista || estado.exemplo) return; // exemplo não é salvo
+  armazenamento.gravar(CHAVE_DADOS, {
+    registros: estado.registros.map(r => ({ nome: r.nome, estagio: r.estagio })),
+    revisar: estado.revisar,
+    relatorio: estado.relatorio,
+    atualizadoEm: estado.atualizadoEm
+  });
+}
+
+function carregarDados() {
+  const d = armazenamento.ler(CHAVE_DADOS);
+  if (!d || !Array.isArray(d.registros)) return false;
+  estado.registros = d.registros
+    .filter(r => r && ESTAGIOS_VALIDOS.has(r.estagio) && typeof r.nome === 'string')
+    .map(r => ({ nome: r.nome, estagio: r.estagio, chaveNome: normalizarNome(r.nome) }));
+  estado.revisar = Array.isArray(d.revisar) ? d.revisar : [];
+  estado.relatorio = d.relatorio && Array.isArray(d.relatorio.duplicados) ? d.relatorio : null;
+  estado.atualizadoEm = d.atualizadoEm || null;
+  return true;
+}
+
+function carregarPreferencias() {
+  const p = armazenamento.ler(CHAVE_PREF) || {};
+  if (typeof p.salvarLista === 'boolean') estado.salvarLista = p.salvarLista;
+  if (typeof p.mascarar === 'boolean') estado.mascarar = p.mascarar;
+  if (p.ordenacao === 'inscritos' || p.ordenacao === 'estagios') estado.ordenacao = p.ordenacao;
+}
+function salvarPreferencias() {
+  armazenamento.gravar(CHAVE_PREF, { salvarLista: estado.salvarLista, mascarar: estado.mascarar, ordenacao: estado.ordenacao });
+}
+
+/* =====================================================================
+   8) AÇÕES DO USUÁRIO
+   ===================================================================== */
+function mensagem(texto, tipo = 'info') {
+  const el = $('#msgEntrada');
+  el.className = 'msg ' + tipo;
+  el.textContent = texto;
+}
+
+/** Importa o conteúdo da caixa de texto. modo: 'substituir' | 'adicionar' */
+function importar(modo) {
+  const campo = $('#entrada');
+  const texto = campo.value;
+  if (!texto.trim()) {
+    mensagem('Cole a lista de inscritos (ou importe um arquivo) antes de continuar.', 'erro');
+    campo.focus();
+    return;
+  }
+  const eraExemplo = estado.exemplo;
+  const substituir = modo === 'substituir' || eraExemplo; // dados de exemplo nunca se misturam com dados reais
+  const r = processarTexto(texto, substituir ? [] : estado.registros);
+
+  if (substituir) {
+    estado.registros = r.novos;
+    estado.revisar = r.revisar;
+  } else {
+    estado.registros = estado.registros.concat(r.novos);
+    estado.revisar = estado.revisar.concat(r.revisar);
+  }
+  estado.exemplo = false;
+  estado.atualizadoEm = new Date().toISOString();
+  estado.relatorio = {
+    modo: substituir ? 'Lista substituída' : 'Adicionado à lista',
+    quando: dataHoraBR(new Date()),
+    lidas: r.lidas, validas: r.novos.length, cabecalhos: r.cabecalhos,
+    revisarQtd: r.revisar.length, duplicados: r.duplicados, exemplo: false
+  };
+  campo.value = ''; // limpa a caixa para não deixar nomes expostos
+  salvarDados();
+  atualizarTudo();
+
+  if (supabase && r.novos.length > 0) {
+    getStagesMap().then(stageMap => {
+      saveRegistrationsBatch(r.novos, stageMap)
+        .then(res => {
+          if (res.count > 0) {
+            console.log(`[Supabase] Sincronizado com sucesso: ${res.count} registros.`);
+          }
+        })
+        .catch(err => console.error('[Supabase] Erro ao sincronizar:', err));
+    }).catch(err => console.error('[Supabase] Erro ao buscar estágios:', err));
+  }
+
+  const partes = [`${r.novos.length} ${r.novos.length === 1 ? 'inscrição válida' : 'inscrições válidas'}`];
+  if (r.duplicados.length) partes.push(`${r.duplicados.length} ${r.duplicados.length === 1 ? 'duplicado removido' : 'duplicados removidos'}`);
+  if (r.revisar.length) partes.push(`${r.revisar.length} para revisar`);
+  const prefixo = eraExemplo && modo === 'adicionar' ? 'Os dados de exemplo foram substituídos. ' : '';
+  mensagem(`${prefixo}${substituir ? 'Dashboard atualizado' : 'Lista atualizada'}: ${partes.join(' · ')}.`, r.revisar.length ? 'info' : 'ok');
+}
+
+function limparDados() {
+  if (!confirm('Apagar a lista de inscritos deste navegador? As configurações de base serão mantidas.')) return;
+  estado.registros = [];
+  estado.revisar = [];
+  estado.relatorio = null;
+  estado.exemplo = false;
+  estado.atualizadoEm = new Date().toISOString();
+  $('#entrada').value = '';
+  if (estado.salvarLista) salvarDados(); else armazenamento.remover(CHAVE_DADOS);
+  atualizarTudo();
+  mensagem('Dados apagados. O dashboard está zerado.', 'ok');
+}
+
+/** Lê arquivo CSV/TXT localmente (UTF-8; se houver caracteres inválidos, tenta Windows-1252 do Excel). */
+function lerArquivo(arquivo) {
+  if (!arquivo) return;
+  const colocar = (txt) => {
+    $('#entrada').value = txt.replace(/^\uFEFF/, '');
+    const n = txt.split(/\r\n|\n|\r/).filter(l => l.trim()).length;
+    mensagem(`Arquivo "${arquivo.name}" carregado (${n} linhas). Clique em “Atualizar dashboard” ou “Adicionar à lista”.`, 'info');
+    $('#arquivo').value = '';
+  };
+  const leitor = new FileReader();
+  leitor.onload = () => {
+    const txt = String(leitor.result || '');
+    if (txt.includes('\uFFFD')) {
+      const alt = new FileReader();
+      alt.onload = () => colocar(String(alt.result || ''));
+      alt.readAsText(arquivo, 'windows-1252');
+    } else {
+      colocar(txt);
+    }
+  };
+  leitor.onerror = () => mensagem('Não foi possível ler o arquivo.', 'erro');
+  leitor.readAsText(arquivo, 'UTF-8');
+}
+
+/* =====================================================================
+   9) DADOS FICTÍCIOS DE EXEMPLO (para teste)
+   ===================================================================== */
+function gerarTextoExemplo() {
+  // Distribuição de teste: exatamente 5 alunos no J2 (5 de 30 = 16.7%), turmas críticas T4 (2), T5 (1) e T6 (0)
+  const qtdDesejada = { K1: 3, K2: 12, J: 10, J1: 14, J2: 5, T1: 12, T2: 8, T3: 6, T4: 2, T5: 1, T6: 0 };
+  const formatos = [
+    (n, e) => `${n};${e}`,
+    (n, e) => `${n}, ${e.toLowerCase().replace(/^([a-z])(\d)$/, '$1 $2')}`,
+    (n, e) => `${n} - ${e.replace(/^([A-Z])(\d)$/, '$1-$2')}`,
+    (n, e) => `${n}\t${e}`,
+    (n, e) => `${e};${n}`
+  ];
+  const gerados = [];
+  let fmtIdx = 0;
+  ESTAGIOS.forEach(est => {
+    const daTurma = OFICIAIS_POR_ESTAGIO[est] || [];
+    const meta = qtdDesejada[est] || 0;
+    for (let k = 0; k < meta && k < daTurma.length; k++) {
+      const aluno = daTurma[k];
+      const fn = formatos[fmtIdx % formatos.length];
+      gerados.push({ nome: aluno.nome, estagio: est, linha: fn(aluno.nome, est) });
+      fmtIdx++;
+    }
+  });
+
+  const linhas = ['Nome;Estágio', ...gerados.map(g => g.linha)];
+  // Casos de teste: duplicado exato, variação de formato e linhas para revisar
+  if (gerados.length > 5) {
+    linhas.push(`${gerados[1].nome};${gerados[1].estagio}`); // duplicado idêntico
+    linhas.push(`${gerados[0].nome};K2`);                      // mesmo nome em estágio diferente (possível duplicidade)
+  }
+  linhas.push('Lucas Martins;T7', 'Mariana Rocha, K3', 'Nome Sem Turma Nem Cadastro'); // linhas para a caixa Revisar
+  return linhas.join('\n');
+}
+
+function carregarExemplo() {
+  const r = processarTexto(gerarTextoExemplo(), []);
+  estado.registros = r.novos;
+  estado.revisar = r.revisar;
+  estado.exemplo = true;
+  estado.atualizadoEm = new Date().toISOString();
+  estado.relatorio = {
+    modo: 'Exemplo carregado', quando: dataHoraBR(new Date()),
+    lidas: r.lidas, validas: r.novos.length, cabecalhos: r.cabecalhos,
+    revisarQtd: r.revisar.length, duplicados: r.duplicados, exemplo: true
+  };
+}
+
+/* =====================================================================
+   10) EVENTOS E INICIALIZAÇÃO
+   ===================================================================== */
+function definirOrdenacao(valor) {
+  estado.ordenacao = valor;
+  $('#ordEstagios').setAttribute('aria-pressed', String(valor === 'estagios'));
+  $('#ordInscritos').setAttribute('aria-pressed', String(valor === 'inscritos'));
+  salvarPreferencias();
+}
+
+async function carregarDadosSupabase() {
+  if (!supabase) return false;
+  try {
+    const inscricoes = await getRegistrations();
+    if (inscricoes && inscricoes.length > 0) {
+      estado.registros = inscricoes.map(i => ({
+        nome: i.student_name,
+        estagio: i.stages?.code || '',
+        chaveNome: i.normalized_name
+      })).filter(i => Boolean(i.estagio));
+      estado.exemplo = false;
+      estado.atualizadoEm = new Date().toISOString();
+      return true;
+    }
+  } catch (err) {
+    console.warn('[Supabase] Falha ao carregar do banco remoto:', err);
+  }
+  return false;
+}
+
+async function iniciar() {
+  montarConfig();
+  carregarPreferencias();
+  carregarConfig();
+  const dadosSupabase = await carregarDadosSupabase();
+  if (!dadosSupabase && !carregarDados()) carregarExemplo(); // primeira abertura ou offline: mostra exemplo
+
+  preencherConfig();
+  $('#chkSalvar').checked = estado.salvarLista;
+  $('#chkMascarar').checked = estado.mascarar;
+  definirOrdenacao(estado.ordenacao);
+
+  renderPrazo();
+  setInterval(renderPrazo, 60 * 1000); // mantém a contagem correta se a página ficar aberta
+  atualizarTudo();
+
+  // Entrada de dados
+  $('#btnAtualizar').addEventListener('click', () => importar('substituir'));
+  $('#btnAdicionar').addEventListener('click', () => importar('adicionar'));
+  $('#btnLimpar').addEventListener('click', limparDados);
+  $('#arquivo').addEventListener('change', (e) => lerArquivo(e.target.files[0]));
+  $('#entrada').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); importar('substituir'); }
+  });
+  $('#btnExemplo').addEventListener('click', () => {
+    if (estado.registros.length && !estado.exemplo &&
+        !confirm('Substituir a lista atual pelos dados fictícios de exemplo? (a lista salva será mantida até você importar outra)')) return;
+    carregarExemplo();
+    atualizarTudo();
+    mensagem('Dados fictícios de exemplo carregados.', 'info');
+  });
+  $('#btnIrEntrada').addEventListener('click', () => setTimeout(() => $('#entrada').focus({ preventScroll: true }), 350));
+
+  $('#chkSalvar').addEventListener('change', (e) => {
+    estado.salvarLista = e.target.checked;
+    salvarPreferencias();
+    if (estado.salvarLista) { salvarDados(); mensagem('A lista ficará salva somente neste navegador.', 'ok'); }
+    else { armazenamento.remover(CHAVE_DADOS); mensagem('Lista removida do navegador. Ao fechar a página, será preciso colar novamente.', 'info'); }
+  });
+
+  // Ordenação
+  $('#ordEstagios').addEventListener('click', () => { definirOrdenacao('estagios'); atualizarTudo(); });
+  $('#ordInscritos').addEventListener('click', () => { definirOrdenacao('inscritos'); atualizarTudo(); });
+
+  // Configurações (salvas automaticamente)
+  const aoMudarConfig = debounce(() => {
+    lerConfigDoFormulario();
+    salvarConfig();
+    atualizarTudo();
+    $('#msgConfig').textContent = 'Configurações salvas neste navegador.';
+  }, 250);
+  $('#gradeBases').addEventListener('input', aoMudarConfig);
+  $('#limite').addEventListener('input', aoMudarConfig);
+  $('#btnRestaurar').addEventListener('click', () => {
+    estado.config = { base: { ...BASE_POR_ESTAGIO }, limite: LIMITE_CRITICA_PADRAO };
+    salvarConfig();
+    preencherConfig();
+    atualizarTudo();
+    $('#msgConfig').textContent = 'Valores do arquivo restaurados.';
+  });
+
+  // Links que abrem o painel de Configurações
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('[data-abrir-config]');
+    if (link) { $('#config').open = true; }
+  });
+
+  // Lista de inscritos: montada só quando aberta
+  $('#listaInscritos').addEventListener('toggle', renderLista);
+  $('#filtroEstagio').addEventListener('change', renderLista);
+  $('#chkMascarar').addEventListener('change', (e) => {
+    estado.mascarar = e.target.checked;
+    salvarPreferencias();
+    renderLista();
+    renderRelatorio();
+  });
+  if ($('#chkMostrarFaltantes')) {
+    $('#chkMostrarFaltantes').addEventListener('change', renderLista);
+  }
+
+  // Responsivo: refaz o gráfico ao redimensionar (troca vertical ↔ horizontal)
+  window.addEventListener('resize', debounce(() => renderGrafico(calcular()), 200));
+}
+
+document.addEventListener('DOMContentLoaded', iniciar);
+</script>
+</body>
+</html>

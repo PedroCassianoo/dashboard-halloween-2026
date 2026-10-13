@@ -1,0 +1,28 @@
+# Segredos e variáveis de ambiente (CRÍTICO: NUNCA COMMITAR)
+.env
+.env.local
+.env.*.local
+
+# Dependências
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Build
+dist/
+dist-ssr/
+*.local
+
+# SO e temporários
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# Configurações de IDE e agentes
+.idea/
+.vscode/
+.gemini/
+.agents/
+skills-lock.json
