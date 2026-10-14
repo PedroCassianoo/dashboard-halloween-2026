@@ -6,28 +6,23 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="referrer" content="no-referrer">
 <!--
-  POLÍTICA DE SEGURANÇA (CSP): Permite conexões seguras com o Supabase e Chart.js
+  POLÍTICA DE SEGURANÇA (CSP): Permite conexões seguras com o Supabase e recursos locais
 -->
 <meta http-equiv="Content-Security-Policy"
-      content="default-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; form-action 'none'; base-uri 'self';">
+      content="default-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; form-action 'none'; base-uri 'self';">
 <title>Halloween Party 2026 · Inscrições · Red Balloon Paulínia</title>
-
-<!-- Chart.js via cdnjs (somente desenha o gráfico; nenhum dado sai do navegador) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" referrerpolicy="no-referrer"></script>
 
 <style>
   /* =====================================================================
      FONTE DE DESTAQUE (Ambit)
-     Usa a Ambit se estiver instalada no computador ou se o arquivo
-     "Ambit-Bold.woff2" estiver na mesma pasta deste HTML.
-     Caso contrário, cai automaticamente para uma fonte do sistema.
+     Usa a Ambit se instalada localmente no dispositivo.
+     Caso contrário, cai automaticamente para fontes do sistema (Segoe UI Black / Arial Black).
      ===================================================================== */
   @font-face {
     font-family: "Ambit";
     font-weight: 700 900;
     font-display: swap;
-    src: local("Ambit Bold"), local("Ambit-Bold"), local("Ambit"),
-         url("Ambit-Bold.woff2") format("woff2");
+    src: local("Ambit Bold"), local("Ambit-Bold"), local("Ambit");
   }
 
   /* ===================== TOKENS DE DESIGN ===================== */
@@ -121,6 +116,33 @@
   .contagem.encerrado .dot { background: var(--faint); box-shadow: none; }
   .topo-acoes { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
   .atualizado { color: var(--faint); font-size: .85rem; }
+  .status-nuvem {
+    display: inline-flex; align-items: center; gap: 6px; font-size: .82rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px; background: rgba(75, 219, 158, .12);
+    border: 1px solid rgba(75, 219, 158, .35); color: #7EF0B9;
+    transition: all .25s ease;
+  }
+  .status-nuvem.offline {
+    background: rgba(255, 255, 255, .05); border-color: var(--border-strong); color: var(--muted);
+  }
+  .status-nuvem.sincronizando {
+    background: rgba(255, 122, 26, .18); border-color: rgba(255, 122, 26, .55); color: #FFE3CC;
+  }
+  .status-nuvem.erro {
+    background: var(--red-bg); border-color: rgba(255, 138, 144, .55); color: #FFD9DB;
+  }
+  .status-nuvem .dot-sync {
+    width: 7px; height: 7px; border-radius: 50%; background: #4BDB9E; display: inline-block;
+  }
+  .status-nuvem.offline .dot-sync { background: var(--faint); }
+  .status-nuvem.erro .dot-sync { background: var(--red); }
+  .status-nuvem.sincronizando .dot-sync {
+    background: var(--orange); animation: pulso-sync 1s infinite alternate;
+  }
+  @keyframes pulso-sync {
+    from { opacity: 0.4; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1.25); }
+  }
 
   /* ===================== BOTÕES ===================== */
   .btn {
@@ -332,9 +354,166 @@
     .mini { width: 50px; }
     .marca svg { width: 52px; height: 52px; }
   }
+
+  /* ===================== TELA DE BLOQUEIO / PIN (LGPD) ===================== */
+  body.bloqueado > header,
+  body.bloqueado > main,
+  body.bloqueado > footer {
+    display: none !important;
+  }
+  .tela-bloqueio {
+    position: fixed; inset: 0; z-index: 99999;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 30%, #1A0D2E 0%, #0A0414 100%);
+    padding: 20px; overflow-y: auto;
+  }
+  .tela-bloqueio.oculto { display: none !important; }
+  .bloqueio-card {
+    background: rgba(22, 11, 40, 0.88);
+    border: 1px solid rgba(255, 122, 26, 0.35);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), 0 0 40px rgba(255, 122, 26, 0.15);
+    border-radius: 20px; padding: 32px 28px; width: 100%; max-width: 390px;
+    text-align: center; backdrop-filter: blur(16px);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .bloqueio-icone { margin-bottom: 12px; }
+  .bloqueio-cabecalho { margin-bottom: 18px; }
+  .badge-privacidade {
+    display: inline-block; font-size: 0.76rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 4px 12px; border-radius: 99px;
+    background: rgba(75, 219, 158, 0.15); color: #7EF0B9; border: 1px solid rgba(75, 219, 158, 0.35);
+    margin-bottom: 10px;
+  }
+  .bloqueio-card h2 { margin: 0 0 6px; font-size: 1.4rem; color: #fff; }
+  .bloqueio-sub { color: var(--muted); font-size: 0.88rem; line-height: 1.4; margin: 0; }
+  .bloqueio-form { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .pin-display {
+    display: flex; gap: 14px; justify-content: center; margin: 18px 0 10px;
+  }
+  .pin-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid rgba(255, 122, 26, 0.5); background: transparent;
+    transition: all 0.2s ease;
+  }
+  .pin-dot.preenchido {
+    background: var(--orange); border-color: var(--orange);
+    box-shadow: 0 0 12px rgba(255, 122, 26, 0.6); transform: scale(1.15);
+  }
+  .input-pin-oculto {
+    position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px;
+  }
+  .bloqueio-msg {
+    min-height: 24px; font-size: 0.85rem; font-weight: 600; margin: 4px 0 14px;
+    color: var(--red-text);
+  }
+  .teclado-pin {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    width: 100%; max-width: 270px; margin-bottom: 16px;
+  }
+  .btn-tecla {
+    background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff; font-size: 1.35rem; font-weight: 700; border-radius: 12px;
+    height: 52px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background 0.15s, transform 0.05s, border-color 0.15s;
+    user-select: none;
+  }
+  .btn-tecla:hover { background: rgba(255, 122, 26, 0.2); border-color: rgba(255, 122, 26, 0.4); }
+  .btn-tecla:active { transform: scale(0.95); background: rgba(255, 122, 26, 0.35); }
+  .btn-tecla.tecla-acao { font-size: 1.1rem; color: #FFE3CC; }
+  .btn-tecla.tecla-entrar {
+    font-size: 1rem; background: var(--orange); color: var(--orange-ink);
+    border-color: transparent;
+  }
+  .btn-tecla.tecla-entrar:hover { background: var(--orange-2); }
+  .lembrar-dispositivo {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 0.82rem;
+    color: var(--faint); cursor: pointer; user-select: none;
+  }
+  .lembrar-dispositivo input { accent-color: var(--orange); cursor: pointer; }
+  .bloqueio-rodape { margin-top: 20px; font-size: 0.75rem; color: var(--faint); border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 14px; width: 100%; }
+  .bloqueio-card.tremer {
+    animation: shake-pin 0.4s ease-in-out;
+  }
+  @keyframes shake-pin {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+  }
 </style>
 </head>
-<body>
+<body class="bloqueado">
+
+<!-- ===================== TELA DE BLOQUEIO / PIN (LGPD) ===================== -->
+<div id="bloqueioAcesso" class="tela-bloqueio" aria-modal="true" role="dialog" aria-labelledby="tituloBloqueio">
+  <div class="bloqueio-card">
+    <div class="bloqueio-icone">
+      <!-- Abóbora Halloween Red Balloon -->
+      <svg width="64" height="64" viewBox="0 0 68 68" aria-hidden="true" focusable="false">
+        <ellipse cx="34" cy="42" rx="26" ry="20" fill="#FF7A1A"/>
+        <ellipse cx="34" cy="42" rx="12" ry="20" fill="#FF9A4D" opacity=".55"/>
+        <path d="M31 22c0-5 2-9 6-11l2 3c-3 2-4 5-4 8z" fill="#4BDB9E"/>
+        <path d="M22 38l6-5 2 7zM46 38l-6-5-2 7z" fill="#1A0D00"/>
+        <path d="M23 48c4 4 18 4 22 0l-3 5-3-2-3 3-3-3-3 3-3-3-3 2z" fill="#1A0D00"/>
+        <circle cx="56" cy="12" r="8" fill="#E30613"/>
+        <path d="M56 20c-1 6 3 8 0 14" stroke="#F6F1FF" stroke-width="1.4" fill="none"/>
+      </svg>
+    </div>
+    <div class="bloqueio-cabecalho">
+      <span class="badge-privacidade">🔒 Acesso Restrito · Coordenação</span>
+      <h2 id="tituloBloqueio">Halloween Party 2026</h2>
+      <p class="bloqueio-sub">Painel interno da Red Balloon Paulínia.<br>Digite o PIN da equipe para liberar o acesso.</p>
+    </div>
+
+    <form id="formPin" class="bloqueio-form" onsubmit="return false;">
+      <div class="pin-display" id="pinDisplay" aria-hidden="true">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+
+      <input 
+        type="password" 
+        id="inputPin" 
+        class="input-pin-oculto" 
+        inputmode="numeric" 
+        pattern="[0-9]*" 
+        maxlength="8" 
+        placeholder="Digite o PIN" 
+        autocomplete="current-password"
+        aria-label="PIN de acesso da equipe"
+        autofocus
+      />
+
+      <div id="msgPin" class="bloqueio-msg" role="alert" aria-live="assertive"></div>
+
+      <!-- Teclado Numérico Touch / Mobile amigável -->
+      <div class="teclado-pin" aria-label="Teclado numérico">
+        <button type="button" class="btn-tecla" data-tecla="1">1</button>
+        <button type="button" class="btn-tecla" data-tecla="2">2</button>
+        <button type="button" class="btn-tecla" data-tecla="3">3</button>
+        <button type="button" class="btn-tecla" data-tecla="4">4</button>
+        <button type="button" class="btn-tecla" data-tecla="5">5</button>
+        <button type="button" class="btn-tecla" data-tecla="6">6</button>
+        <button type="button" class="btn-tecla" data-tecla="7">7</button>
+        <button type="button" class="btn-tecla" data-tecla="8">8</button>
+        <button type="button" class="btn-tecla" data-tecla="9">9</button>
+        <button type="button" class="btn-tecla tecla-acao" data-tecla="limpar" title="Limpar dígito">⌫</button>
+        <button type="button" class="btn-tecla" data-tecla="0">0</button>
+        <button type="button" class="btn-tecla tecla-entrar" data-tecla="entrar" title="Confirmar PIN">OK</button>
+      </div>
+
+      <label class="lembrar-dispositivo">
+        <input type="checkbox" id="chkLembrarPin" />
+        <span>Lembrar neste navegador por 24h</span>
+      </label>
+    </form>
+
+    <footer class="bloqueio-rodape">
+      <p>🛡️ Proteção e privacidade de dados de menores em conformidade com a LGPD.<br>Red Balloon Paulínia · Painel restrito à equipe.</p>
+    </footer>
+  </div>
+</div>
 
 <!-- ===================== CABEÇALHO ===================== -->
 <header class="topo">
@@ -370,8 +549,13 @@
         <span id="contagemTexto">Calculando prazo…</span>
       </div>
       <div class="topo-acoes">
+        <span class="status-nuvem" id="statusNuvem" title="Status da conexão em tempo real com a nuvem">
+          <span class="dot-sync" aria-hidden="true"></span>
+          <span class="status-texto">Verificando nuvem…</span>
+        </span>
         <span class="atualizado" id="atualizadoEm"></span>
         <a class="btn btn-secundario" href="#entradaDados" id="btnIrEntrada">Colar lista de inscritos</a>
+        <button type="button" class="btn btn-secundario" id="btnBloquear" title="Bloquear acesso e proteger dados"><span aria-hidden="true">🔒</span> Bloquear</button>
       </div>
     </div>
   </div>
@@ -539,13 +723,24 @@
 </main>
 
 <footer class="container rodape">
-  <p>🔒 Privacidade: os dados dos alunos ficam somente neste navegador. A página não envia informações a servidores, APIs ou ferramentas de analytics.</p>
+  <p>🔒 Privacidade & LGPD: Acesso protegido por PIN restrito à equipe. Dados sincronizados com segurança e criptografia de ponta a ponta.</p>
   <p>Red Balloon Paulínia · Halloween Party · 28/10/2026, 17h às 20h.</p>
 </footer>
 
 <script type="module">
+import Chart from 'chart.js/auto';
 import { supabase } from './src/lib/supabaseClient.js';
-import { getRegistrations, saveRegistrationsBatch, getStagesMap } from './src/services/dashboardService.js';
+import { 
+  getRegistrations, 
+  saveRegistrationsBatch, 
+  replaceRegistrationsBatch, 
+  clearRegistrations, 
+  getStagesMap, 
+  subscribeToRegistrations, 
+  isCloudConnected 
+} from './src/services/dashboardService.js';
+import { ALUNOS_OFICIAIS, MAPA_ALUNOS_OFICIAIS, OFICIAIS_POR_ESTAGIO } from './src/data/alunosOficiais.js';
+import { verifyPin, isUnlocked, lock, checkLockout } from './src/services/authService.js';
 
 /* =====================================================================
    1) CONFIGURAÇÃO INICIAL
@@ -568,222 +763,7 @@ const BASE_POR_ESTAGIO = {
   T6: 5
 };
 
-// Base completa dos 204 alunos matriculados na escola (utilizada para identificação automática e acompanhamento de oportunidades)
-const ALUNOS_OFICIAIS = [
-  ["Isabela Bugarim Pereira", "J"],
-  ["Pedro Moreira", "J"],
-  ["Angelina Camargo Freire", "J"],
-  ["Ana Luisa Barbosa", "J"],
-  ["Antonella Gomes Machado", "J"],
-  ["Cecilia Bruni Avancini", "J"],
-  ["Cecília Ortolan Lopes", "J"],
-  ["Fernanda Mazzini Carvalho", "J"],
-  ["Ivy Refundini Albuquerque", "J"],
-  ["Larissa Costa Pinheiro", "J"],
-  ["Livia Galvão dos Santos", "J"],
-  ["Luisa Giroto Vieira", "J"],
-  ["Luiza Castro Köpke", "J"],
-  ["Mariah dos Santos Borghi", "J"],
-  ["Miguel Chiavegato Meloni", "J"],
-  ["Pedro Zilião Prado Pizzini", "J"],
-  ["Alice Bull Ferreira", "J1"],
-  ["Augusto Neves Madureira", "J1"],
-  ["Sofia Batalha Pessagno", "J1"],
-  ["Davi de Gusmão Silva Ferreira", "K2"],
-  ["Helena Martins Rocha", "K2"],
-  ["Isis Fortes Scorsoni", "K2"],
-  ["Marina Minatel Persson", "K2"],
-  ["Nilo de Aragão Freire Ferreira Finger", "K2"],
-  ["Elisa Romeiro de Almeida", "J2"],
-  ["Gabriel Carvalho Carielo", "J2"],
-  ["Larissa Tinoco Menezes", "J2"],
-  ["Lorenzo Vieira de Almeida", "J2"],
-  ["Luisa Coimbra de Castro", "J2"],
-  ["Maria Antonia Aires Marassi", "J2"],
-  ["Matheus Godoy Bresil", "J2"],
-  ["Miguel Teixeira Capone", "J2"],
-  ["Mirela Viana de Souza", "J2"],
-  ["Sarah Monteiro de Lucas", "J2"],
-  ["Beatriz Vieira de Luca", "J2"],
-  ["Flora Luiza Dantas Antunes", "J2"],
-  ["Henrique Rezende Pacheco", "J2"],
-  ["Henrique Santiciolli Lage", "J2"],
-  ["Joaquim Brandão Ramos Soares", "J2"],
-  ["Leonardo Nascimbem de Godoy", "J2"],
-  ["Pedro Luiz Tasinaffo Simão", "J2"],
-  ["Bernardo da Costa Bico", "K1"],
-  ["Manuela Bernardino Fida", "K1"],
-  ["Alissa Mirone de Almeida Ferreira", "K1"],
-  ["Pietro Lira Rozzi", "K1"],
-  ["Gustavo Resende Ribeiro", "K1"],
-  ["Henry Gavioli Brenelli", "K1"],
-  ["Maya Matos Dantas", "K1"],
-  ["Noah Batalha Pessagno", "K1"],
-  ["Gustavo de Luca Lima", "J2"],
-  ["Heitor de Moraes Furtado", "J2"],
-  ["Isabela Capel Cardoso", "J2"],
-  ["Sara Rossin Akahoshi Collado", "J2"],
-  ["Theo Duclos Trindade de Andrade", "J2"],
-  ["Miguel Sampaio Wiltenburg", "J2"],
-  ["Alice Galvani Coteco", "J2"],
-  ["Pedro Camargo Zanetti", "J2"],
-  ["Alice Souza Justino", "T1"],
-  ["Beatriz Scarpim Mazzuia", "T1"],
-  ["Isadora Vicentin Lima", "T1"],
-  ["Julia Russo Hortencio", "T1"],
-  ["Lívia Coimbra de Castro", "T1"],
-  ["Pedro Isao Kanashiro Katsumata", "T1"],
-  ["Sophia da Silva Rubio", "T1"],
-  ["Eduardo Cavazotto Filho", "T1"],
-  ["Isis Valentina Roberto Garcez", "T1"],
-  ["Clayton Rodrigo Machado Junior", "T1"],
-  ["Giovanna Mussato Ferreira", "T1"],
-  ["João Kazuo Guima", "T1"],
-  ["Laura Felício Alves", "T1"],
-  ["Manuela Morales Fortunato", "T1"],
-  ["Mateus Linhares Alves", "T1"],
-  ["Vitor Angelucci Maciel", "T1"],
-  ["Barbara Stort Campos", "T1"],
-  ["Davi Quinalia Leite Penteado", "T1"],
-  ["Diogo Francisco Sarro Moraes", "T1"],
-  ["Heloisa Silva Marques", "T1"],
-  ["João Arruda Amatte", "T1"],
-  ["Otávio Vieira de Luca", "T1"],
-  ["Isabela Santos Caldas", "T1"],
-  ["Luiza Trevenzoli Corrêa Dias", "T1"],
-  ["Bento Bestetti", "J2"],
-  ["Georges Balech Neto", "J2"],
-  ["Isadora Aparecida Guadagnini Fagnani", "J2"],
-  ["Lorenzzo Mussato Ferreira", "J2"],
-  ["Luísa Campos Marin", "J2"],
-  ["Isabella Minatel Persson", "T2"],
-  ["Aimê Trevisan Machado", "T2"],
-  ["Amanda Tognolo Althmann", "T2"],
-  ["Felipe Vieira Medeiros", "T2"],
-  ["Heloisa Delfino da Costa", "T2"],
-  ["João Pedro Mendes de Oliveira", "T2"],
-  ["João Vitor Carvalho Lima", "T2"],
-  ["Luís Otávio Rigo Miguel", "T2"],
-  ["Manuela Cardoso de Freitas", "T2"],
-  ["Rafael Vieira Medeiros", "T2"],
-  ["Alice Domingues Ferreira", "T2"],
-  ["Alice Medeiros Caron", "T2"],
-  ["Gabriel Castilho Gallasch", "T2"],
-  ["Gabriela Martins Costa", "T2"],
-  ["Ian Cardoso Luz", "T2"],
-  ["Laura Neves Madureira", "T2"],
-  ["Lavínia Carmona Cunha", "T2"],
-  ["Maria Eduarda Ayumi Barbosa", "T2"],
-  ["Miguel Barboza Ferreira de Melo", "T2"],
-  ["Miguel Branco de Medeiros", "T2"],
-  ["Beatriz Mendes Parizotto", "T5"],
-  ["Beatriz Piccolo Sant'Anna Zemuner", "T5"],
-  ["Caio Giroto Vieira", "T5"],
-  ["Enzo Tamaru de Souza", "T5"],
-  ["Giovana Kalvan Itami", "T5"],
-  ["Sarah Yuki Gonçalves Peixoto", "T5"],
-  ["Julio Carvalho Soares Bicalho", "T5"],
-  ["Felipe Moura Ioricci", "T3"],
-  ["Isabella Minako Alberton", "T3"],
-  ["Isabella Nunes Tombini", "T3"],
-  ["Kadu Fontaneli Ferro", "T3"],
-  ["Laura Rosolem Martins", "T3"],
-  ["Pedro Almeida Magalhães e Silva", "T3"],
-  ["Rafael Kyono Naves", "T3"],
-  ["Samuel Baldoria Voltan", "T3"],
-  ["Victor Ferrari de Oliveira", "T3"],
-  ["Angelina Varanda Machado", "T3"],
-  ["Beatriz Angelucci Maciel", "T3"],
-  ["Clara Luisa Ramos da Cruz", "T3"],
-  ["Giovanna Fernandes Almeida", "T3"],
-  ["Guilherme Lourencetti Scalisso", "T3"],
-  ["Laís Barbosa Martinez", "T3"],
-  ["Leticia Borges Chionha", "T3"],
-  ["Leticia Uchoa Marques", "T3"],
-  ["Manuela Nascimento Silva de Tullio Ferreira", "T3"],
-  ["Miguel Penachin Ruzza", "T3"],
-  ["Murilo Linhares Alves", "T3"],
-  ["Rafaela Alves Correa", "T3"],
-  ["Guilherme Lyrio Bragança", "T3"],
-  ["Guilherme Rocha Ribeiro", "T3"],
-  ["Maria Clara Quaiatti", "T3"],
-  ["Samuel Casado Mastrodi", "T3"],
-  ["Arthur da Silva Casarin", "T4"],
-  ["Caio Silva Souza", "T4"],
-  ["Gabriela Stort Campos", "T4"],
-  ["Helena Bastos Nogueira Carreira", "T4"],
-  ["Helena Solana Almeida", "T4"],
-  ["Letícia Manuela C. Oliviére", "T4"],
-  ["Valentina Gomes Machado", "T4"],
-  ["Antonia Bertoni Ferrari", "J"],
-  ["Bárbara Fábio Rigo", "J"],
-  ["Cecilia Gorino Mason", "J"],
-  ["Gabriel Resende Ribeiro", "J"],
-  ["João Gabriel Leitão Soragni", "J"],
-  ["João Pedro Baganha", "J"],
-  ["Manuella Paschoaleto", "J"],
-  ["Marina Bertucci Lourençon Silva", "J"],
-  ["Ana Luiza de Oliveira Varanda", "J1"],
-  ["Isabela Favaro", "J1"],
-  ["José Bernardo Bassani", "J1"],
-  ["Luiza Romeiro de Almeida", "J1"],
-  ["Melissa Perallis Salmazo", "J1"],
-  ["Pedro Henrique Rigo Miguel", "J1"],
-  ["Pedro Victoriano Alves", "J1"],
-  ["Miguel Vieira Almeida", "J1"],
-  ["Arthur Miguel Carvalho Lima", "J1"],
-  ["Beatriz Gasparoni Cardoso", "J1"],
-  ["Carolina Alves Corrêa", "J1"],
-  ["Isabela Keiko Guima", "J1"],
-  ["Ítalo Sartor Salvador", "J1"],
-  ["Laura dos Santos Magalhães", "J1"],
-  ["Matheus Zuccherato Gil", "J1"],
-  ["Alice Borges Ruzza Dalben", "K2"],
-  ["Gabriel Lima da Silva", "K2"],
-  ["Luiz Marques de Oliveira Dalbem", "K2"],
-  ["Otávio de Moraes Furtado", "K2"],
-  ["Tiago Duclos Trindade De Andrade", "K2"],
-  ["Caio Carvalho Bordin", "J1"],
-  ["Gabriel Pereira Lima", "J1"],
-  ["Manuela Mendes Cavagna", "J1"],
-  ["Maria Cecilia Carvalho Bordin", "J1"],
-  ["Mateus de Aragão Freire Ferreira Finger", "J1"],
-  ["Murilo Fernandes Floriano", "J1"],
-  ["Vinicius Ferreira França de Oliveira", "J1"],
-  ["Alice Sanches Santos Bonifácio Romera", "J1"],
-  ["Lucas Bueno Cosme De Oliveira", "J1"],
-  ["Elisa Guadagnini Araújo", "T2"],
-  ["Julia Milena Feijó de Carvalho", "T2"],
-  ["Luiza Carvalho Malia", "T2"],
-  ["Rafaela Sanches Rosa", "T2"],
-  ["Guilherme de Luca Lima", "T3"],
-  ["Affonso Rezende Ersching", "K2"],
-  ["Alessandro Tinoco Menezes", "K2"],
-  ["Karen Bernadette Mendonça Convento", "K2"],
-  ["Larissa Chahine Kairis Antonio", "K2"],
-  ["Lorena Delfino da Costa", "K2"],
-  ["Beatriz Castilho Gallasch", "K2"],
-  ["Maya Machado de Souza", "K2"],
-  ["Milena Ferreira Cassano", "K2"],
-  ["Rafaela Tonon Pietrobon", "K2"],
-  ["Davi Santos Damasceno", "K2"],
-  ["Felipe Augusto Pavan D. Filho", "K2"],
-  ["Tomás Zuzi Bardin", "K2"],
-  ["Enrico Augusto Rodrigues de Azevedo", "T6"],
-  ["Giovana Vitorio do Nascimento", "T6"],
-  ["Helena Brantegani Girardelli", "T6"],
-  ["Hélio Torres Soares", "T6"],
-  ["Henrique Oliveira Munsignatti", "T6"]
-];
-
-const MAPA_ALUNOS_OFICIAIS = new Map();
-const OFICIAIS_POR_ESTAGIO = Object.fromEntries(['K1', 'K2', 'J', 'J1', 'J2', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6'].map(e => [e, []]));
-ALUNOS_OFICIAIS.forEach(([n, e]) => {
-  const norm = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9' -]/g, ' ').replace(/\s+/g, ' ').trim();
-  const obj = { nome: n, estagio: e, chave: norm };
-  MAPA_ALUNOS_OFICIAIS.set(norm, obj);
-  if (OFICIAIS_POR_ESTAGIO[e]) OFICIAIS_POR_ESTAGIO[e].push(obj);
-});
+// Base oficial dos 204 alunos carregada de forma protegida via src/data/alunosOficiais.js
 
 // Ordem fixa dos estágios (não altere)
 const ESTAGIOS = ['K1', 'K2', 'J', 'J1', 'J2', 'T1', 'T2', 'T3', 'T4', 'T5', 'T6'];
@@ -1478,6 +1458,12 @@ function renderRelatorio() {
 
 /* ---------- Lista de inscritos e oportunidades por estágio ---------- */
 function renderLista() {
+  if (!isUnlocked()) {
+    $('#qtdLista').textContent = '0';
+    const alvo = $('#listaConteudo');
+    if (alvo) alvo.innerHTML = '';
+    return;
+  }
   $('#qtdLista').textContent = estado.registros.length;
   const det = $('#listaInscritos'), alvo = $('#listaConteudo');
   if (!det.open) { alvo.innerHTML = ''; return; }
@@ -1611,8 +1597,20 @@ function salvarPreferencias() {
 }
 
 /* =====================================================================
-   8) AÇÕES DO USUÁRIO
+   8) AÇÕES DO USUÁRIO E SINCRONIZAÇÃO EM NUVEM
    ===================================================================== */
+let isSavingLocally = false;
+let realtimeSyncDebounce = null;
+let realtimeChannel = null;
+
+function atualizarStatusNuvem(status, texto) {
+  const el = $('#statusNuvem');
+  if (!el) return;
+  el.className = 'status-nuvem ' + (status || 'offline');
+  const txt = el.querySelector('.status-texto');
+  if (txt) txt.textContent = texto || '';
+}
+
 function mensagem(texto, tipo = 'info') {
   const el = $('#msgEntrada');
   el.className = 'msg ' + tipo;
@@ -1620,7 +1618,7 @@ function mensagem(texto, tipo = 'info') {
 }
 
 /** Importa o conteúdo da caixa de texto. modo: 'substituir' | 'adicionar' */
-function importar(modo) {
+async function importar(modo) {
   const campo = $('#entrada');
   const texto = campo.value;
   if (!texto.trim()) {
@@ -1651,27 +1649,47 @@ function importar(modo) {
   salvarDados();
   atualizarTudo();
 
-  if (supabase && r.novos.length > 0) {
-    getStagesMap().then(stageMap => {
-      saveRegistrationsBatch(r.novos, stageMap)
-        .then(res => {
-          if (res.count > 0) {
-            console.log(`[Supabase] Sincronizado com sucesso: ${res.count} registros.`);
-          }
-        })
-        .catch(err => console.error('[Supabase] Erro ao sincronizar:', err));
-    }).catch(err => console.error('[Supabase] Erro ao buscar estágios:', err));
-  }
-
   const partes = [`${r.novos.length} ${r.novos.length === 1 ? 'inscrição válida' : 'inscrições válidas'}`];
   if (r.duplicados.length) partes.push(`${r.duplicados.length} ${r.duplicados.length === 1 ? 'duplicado removido' : 'duplicados removidos'}`);
   if (r.revisar.length) partes.push(`${r.revisar.length} para revisar`);
   const prefixo = eraExemplo && modo === 'adicionar' ? 'Os dados de exemplo foram substituídos. ' : '';
-  mensagem(`${prefixo}${substituir ? 'Dashboard atualizado' : 'Lista atualizada'}: ${partes.join(' · ')}.`, r.revisar.length ? 'info' : 'ok');
+
+  if (isCloudConnected()) {
+    isSavingLocally = true;
+    atualizarStatusNuvem('sincronizando', 'Sincronizando na nuvem...');
+    mensagem(`${prefixo}${substituir ? 'Dashboard atualizado' : 'Lista atualizada'}: ${partes.join(' · ')}. Sincronizando com Supabase...`, 'info');
+
+    try {
+      const stageMap = await getStagesMap();
+      let res;
+      if (substituir) {
+        res = await replaceRegistrationsBatch(r.novos, stageMap);
+      } else {
+        res = await saveRegistrationsBatch(r.novos, stageMap);
+      }
+      console.log(`[Supabase] Sincronizado com sucesso: ${res.count} registros.`);
+      atualizarStatusNuvem('conectado', 'Nuvem sincronizada');
+      mensagem(`${prefixo}${substituir ? 'Dashboard atualizado (substituído na nuvem)' : 'Lista atualizada (adicionado à nuvem)'}: ${partes.join(' · ')}.`, r.revisar.length ? 'info' : 'ok');
+    } catch (err) {
+      console.error('[Supabase] Erro ao sincronizar:', err);
+      atualizarStatusNuvem('erro', 'Erro de sincronização');
+      mensagem(`Salvo neste navegador, mas ocorreu um erro no Supabase: ${err.message}`, 'erro');
+    } finally {
+      setTimeout(() => { isSavingLocally = false; }, 800);
+    }
+  } else {
+    mensagem(`${prefixo}${substituir ? 'Dashboard atualizado' : 'Lista atualizada'}: ${partes.join(' · ')}.`, r.revisar.length ? 'info' : 'ok');
+  }
 }
 
-function limparDados() {
-  if (!confirm('Apagar a lista de inscritos deste navegador? As configurações de base serão mantidas.')) return;
+async function limparDados() {
+  const conectado = isCloudConnected();
+  const confirmMsg = conectado
+    ? 'Apagar toda a lista de inscritos? Esta ação apagará os dados deste navegador e da nuvem (Supabase) para todos os coordenadores.'
+    : 'Apagar a lista de inscritos deste navegador? As configurações de base serão mantidas.';
+
+  if (!confirm(confirmMsg)) return;
+
   estado.registros = [];
   estado.revisar = [];
   estado.relatorio = null;
@@ -1680,7 +1698,24 @@ function limparDados() {
   $('#entrada').value = '';
   if (estado.salvarLista) salvarDados(); else armazenamento.remover(CHAVE_DADOS);
   atualizarTudo();
-  mensagem('Dados apagados. O dashboard está zerado.', 'ok');
+
+  if (conectado) {
+    isSavingLocally = true;
+    atualizarStatusNuvem('sincronizando', 'Limpando dados na nuvem...');
+    try {
+      await clearRegistrations();
+      atualizarStatusNuvem('conectado', 'Nuvem sincronizada (zerada)');
+      mensagem('Dados apagados com sucesso neste navegador e na nuvem (Supabase). O dashboard está zerado.', 'ok');
+    } catch (err) {
+      console.error('[Supabase] Erro ao limpar dados:', err);
+      atualizarStatusNuvem('erro', 'Erro ao limpar nuvem');
+      mensagem(`Dados apagados localmente, mas erro ao limpar na nuvem: ${err.message}`, 'erro');
+    } finally {
+      setTimeout(() => { isSavingLocally = false; }, 800);
+    }
+  } else {
+    mensagem('Dados apagados. O dashboard está zerado.', 'ok');
+  }
 }
 
 /** Lê arquivo CSV/TXT localmente (UTF-8; se houver caracteres inválidos, tenta Windows-1252 do Excel). */
@@ -1757,8 +1792,139 @@ function carregarExemplo() {
 }
 
 /* =====================================================================
-   10) EVENTOS E INICIALIZAÇÃO
+   10) CONTROLE DE ACESSO POR PIN (LGPD) E EVENTOS
    ===================================================================== */
+let pinDigitado = '';
+
+function atualizarDisplayPin() {
+  const dots = document.querySelectorAll('#pinDisplay .pin-dot');
+  dots.forEach((dot, idx) => {
+    if (idx < pinDigitado.length) {
+      dot.classList.add('preenchido');
+    } else {
+      dot.classList.remove('preenchido');
+    }
+  });
+  const inputEl = $('#inputPin');
+  if (inputEl) inputEl.value = pinDigitado;
+}
+
+function exibirErroPin(msg) {
+  const elMsg = $('#msgPin');
+  const card = $('.bloqueio-card');
+  if (elMsg) elMsg.textContent = msg || '';
+  if (card && msg) {
+    card.classList.remove('tremer');
+    void card.offsetWidth; // reflow para reiniciar animação
+    card.classList.add('tremer');
+  }
+}
+
+function submeterPin() {
+  if (!pinDigitado) {
+    exibirErroPin('Por favor, digite o PIN.');
+    return;
+  }
+
+  const lembrar = $('#chkLembrarPin')?.checked || false;
+  const res = verifyPin(pinDigitado, lembrar);
+
+  if (res.success) {
+    pinDigitado = '';
+    atualizarDisplayPin();
+    exibirErroPin('');
+    desbloquearPainel();
+  } else {
+    pinDigitado = '';
+    atualizarDisplayPin();
+    exibirErroPin(res.message);
+  }
+}
+
+function bloquearPainel() {
+  lock();
+  document.body.classList.add('bloqueado');
+  const overlay = $('#bloqueioAcesso');
+  if (overlay) overlay.classList.remove('oculto');
+  pinDigitado = '';
+  atualizarDisplayPin();
+  exibirErroPin('');
+  setTimeout(() => {
+    const inputEl = $('#inputPin');
+    if (inputEl) inputEl.focus();
+  }, 100);
+}
+
+function desbloquearPainel() {
+  document.body.classList.remove('bloqueado');
+  const overlay = $('#bloqueioAcesso');
+  if (overlay) overlay.classList.add('oculto');
+  atualizarTudo();
+  renderLista();
+}
+
+function configurarEventosPin() {
+  const overlay = $('#bloqueioAcesso');
+  if (!overlay) return;
+
+  // Cliques no teclado numérico virtual
+  overlay.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-tecla');
+    if (!btn) return;
+    const tecla = btn.dataset.tecla;
+    if (!tecla) return;
+
+    if (tecla === 'limpar') {
+      pinDigitado = pinDigitado.slice(0, -1);
+      atualizarDisplayPin();
+      exibirErroPin('');
+    } else if (tecla === 'entrar') {
+      submeterPin();
+    } else if (/^\d$/.test(tecla)) {
+      if (pinDigitado.length < 8) {
+        pinDigitado += tecla;
+        atualizarDisplayPin();
+        exibirErroPin('');
+        if (pinDigitado.length === 4) {
+          submeterPin();
+        }
+      }
+    }
+  });
+
+  // Teclado físico
+  window.addEventListener('keydown', (e) => {
+    if (!document.body.classList.contains('bloqueado')) return;
+
+    if (e.key >= '0' && e.key <= '9') {
+      if (pinDigitado.length < 8) {
+        pinDigitado += e.key;
+        atualizarDisplayPin();
+        exibirErroPin('');
+        if (pinDigitado.length === 4) {
+          submeterPin();
+        }
+      }
+    } else if (e.key === 'Backspace') {
+      pinDigitado = pinDigitado.slice(0, -1);
+      atualizarDisplayPin();
+      exibirErroPin('');
+    } else if (e.key === 'Enter') {
+      submeterPin();
+    } else if (e.key === 'Escape') {
+      pinDigitado = '';
+      atualizarDisplayPin();
+      exibirErroPin('');
+    }
+  });
+
+  // Botão Bloquear no topo
+  const btnBloquear = $('#btnBloquear');
+  if (btnBloquear) {
+    btnBloquear.addEventListener('click', bloquearPainel);
+  }
+}
+
 function definirOrdenacao(valor) {
   estado.ordenacao = valor;
   $('#ordEstagios').setAttribute('aria-pressed', String(valor === 'estagios'));
@@ -1766,19 +1932,22 @@ function definirOrdenacao(valor) {
   salvarPreferencias();
 }
 
-async function carregarDadosSupabase() {
-  if (!supabase) return false;
+async function carregarDadosSupabase(aceitarVazio = false) {
+  if (!isCloudConnected()) return false;
   try {
     const inscricoes = await getRegistrations();
-    if (inscricoes && inscricoes.length > 0) {
-      estado.registros = inscricoes.map(i => ({
-        nome: i.student_name,
-        estagio: i.stages?.code || '',
-        chaveNome: i.normalized_name
-      })).filter(i => Boolean(i.estagio));
-      estado.exemplo = false;
-      estado.atualizadoEm = new Date().toISOString();
-      return true;
+    if (inscricoes !== null) {
+      if (inscricoes.length > 0 || aceitarVazio) {
+        estado.registros = inscricoes.map(i => ({
+          nome: i.student_name,
+          estagio: i.stages?.code || '',
+          chaveNome: i.normalized_name
+        })).filter(i => Boolean(i.estagio));
+        estado.exemplo = false;
+        estado.atualizadoEm = new Date().toISOString();
+        if (estado.salvarLista) salvarDados();
+        return true;
+      }
     }
   } catch (err) {
     console.warn('[Supabase] Falha ao carregar do banco remoto:', err);
@@ -1786,12 +1955,62 @@ async function carregarDadosSupabase() {
   return false;
 }
 
+function iniciarRealtimeSync() {
+  if (!isCloudConnected()) return;
+
+  realtimeChannel = subscribeToRegistrations((payload) => {
+    // Se a alteração partiu da própria ação desta aba nos últimos instantes, ignora o eco
+    if (isSavingLocally) return;
+
+    console.log('[Supabase Realtime] Atualização remota recebida:', payload.eventType);
+    atualizarStatusNuvem('sincronizando', 'Sincronizando em tempo real...');
+
+    clearTimeout(realtimeSyncDebounce);
+    realtimeSyncDebounce = setTimeout(async () => {
+      if (isSavingLocally) return;
+
+      const ok = await carregarDadosSupabase(true);
+      if (ok) {
+        atualizarTudo();
+        renderLista();
+        atualizarStatusNuvem('conectado', 'Nuvem sincronizada');
+        mensagem('⚡ Dados atualizados em tempo real via nuvem.', 'info');
+      }
+    }, 350);
+  });
+}
+
 async function iniciar() {
+  // Configuração da barreira de acesso e PIN (LGPD)
+  configurarEventosPin();
+  if (isUnlocked()) {
+    desbloquearPainel();
+  } else {
+    bloquearPainel();
+  }
+
   montarConfig();
   carregarPreferencias();
   carregarConfig();
-  const dadosSupabase = await carregarDadosSupabase();
-  if (!dadosSupabase && !carregarDados()) carregarExemplo(); // primeira abertura ou offline: mostra exemplo
+
+  if (isCloudConnected()) {
+    atualizarStatusNuvem('sincronizando', 'Conectando à nuvem...');
+  } else {
+    atualizarStatusNuvem('offline', 'Modo offline');
+  }
+
+  const dadosSupabase = await carregarDadosSupabase(false);
+  if (dadosSupabase) {
+    atualizarStatusNuvem('conectado', 'Nuvem sincronizada');
+  } else {
+    if (!carregarDados()) carregarExemplo(); // primeira abertura ou offline: mostra exemplo
+    if (isCloudConnected()) {
+      atualizarStatusNuvem('conectado', 'Nuvem conectada (base vazia)');
+    }
+  }
+
+  // Ativa listener em tempo real para sincronização instantânea multi-dispositivo
+  iniciarRealtimeSync();
 
   preencherConfig();
   $('#chkSalvar').checked = estado.salvarLista;
