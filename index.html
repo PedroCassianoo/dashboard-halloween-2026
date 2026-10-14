@@ -554,7 +554,6 @@
           <span class="status-texto">Verificando nuvem…</span>
         </span>
         <span class="atualizado" id="atualizadoEm"></span>
-        <a class="btn btn-secundario" href="#entradaDados" id="btnIrEntrada">Colar lista de inscritos</a>
         <button type="button" class="btn btn-secundario" id="btnBloquear" title="Bloquear acesso e proteger dados"><span aria-hidden="true">🔒</span> Bloquear</button>
       </div>
     </div>
@@ -644,65 +643,26 @@
     <div class="verificacao" id="verificacao"></div>
   </section>
 
-  <!-- ===================== ENTRADA DE DADOS + CONFIGURAÇÕES ===================== -->
-  <div class="grade-inferior">
-    <section class="painel" id="entradaDados" aria-labelledby="tEntrada">
-      <div class="painel-cab">
-        <div>
-          <h2 id="tEntrada">Entrada de dados</h2>
-          <p class="desc">Tudo é processado neste navegador. Nenhum dado é enviado para a internet.</p>
-        </div>
-        <button type="button" class="btn-link btn" id="btnExemplo">Carregar dados de exemplo</button>
+  <!-- ===================== CONFIGURAÇÕES ===================== -->
+  <section class="painel" aria-label="Configurações">
+    <details class="config" id="config">
+      <summary>
+        <h2>Configurações</h2>
+        <span class="seta"><span class="seta-txt"></span></span>
+      </summary>
+      <p class="desc">Base de alunos por estágio e limite de Turma Crítica. Salvo automaticamente neste navegador.</p>
+      <div class="grade-bases" id="gradeBases"></div>
+      <p class="soma-bases ok" id="somaBases" role="status">Soma das bases: 204</p>
+      <div class="campo campo-limite">
+        <label for="limite">Turma Crítica quando inscritos for menor ou igual a</label>
+        <input type="number" id="limite" min="0" step="1" inputmode="numeric">
       </div>
-
-      <label for="entrada" class="rotulo">Cole a lista de inscritos (uma linha por aluno)</label>
-      <textarea id="entrada" spellcheck="false" autocomplete="off"
-        placeholder="Maria Souza;K2&#10;João Lima, T 4&#10;Ana Prado - T-1&#10;Lucas Rocha&#9;J2&#10;J1;Pedro Alves"></textarea>
-      <p class="dica">Formatos aceitos: <code>Nome;Estágio</code> · <code>Nome, Estágio</code> · <code>Nome - Estágio</code> · <code>Nome[TAB]Estágio</code> · <code>Estágio;Nome</code>. Atalho: Ctrl+Enter atualiza o dashboard.</p>
-
       <div class="acoes">
-        <button type="button" class="btn btn-primario" id="btnAtualizar">Atualizar dashboard</button>
-        <button type="button" class="btn btn-secundario" id="btnAdicionar">Adicionar à lista</button>
-        <label class="btn btn-secundario btn-arquivo">
-          <input type="file" id="arquivo" accept=".csv,.txt,text/csv,text/plain" aria-label="Importar arquivo CSV ou TXT">
-          Importar CSV/TXT
-        </label>
-        <button type="button" class="btn btn-perigo" id="btnLimpar">Limpar dados</button>
+        <button type="button" class="btn btn-secundario" id="btnRestaurar">Restaurar valores do arquivo</button>
       </div>
-      <div class="linha-opcoes">
-        <label class="check"><input type="checkbox" id="chkSalvar" checked> Manter a lista salva neste navegador</label>
-      </div>
-      <p class="msg" id="msgEntrada" role="status" aria-live="polite"></p>
-
-      <!-- Resultado da importação: linhas inválidas e duplicadas nunca somem em silêncio -->
-      <div class="relatorio" id="importacao">
-        <p class="resumo-import" id="resumoImport">Nenhuma importação ainda.</p>
-        <div class="caixa" id="caixaRevisar"></div>
-        <div class="caixa dups" id="caixaDuplicados"></div>
-        <div class="caixa dups" id="caixaPossiveis"></div>
-      </div>
-    </section>
-
-    <section class="painel" aria-label="Configurações">
-      <details class="config" id="config">
-        <summary>
-          <h2>Configurações</h2>
-          <span class="seta"><span class="seta-txt"></span></span>
-        </summary>
-        <p class="desc">Base de alunos por estágio e limite de Turma Crítica. Salvo automaticamente neste navegador.</p>
-        <div class="grade-bases" id="gradeBases"></div>
-        <p class="soma-bases ok" id="somaBases" role="status">Soma das bases: 204</p>
-        <div class="campo campo-limite">
-          <label for="limite">Turma Crítica quando inscritos for menor ou igual a</label>
-          <input type="number" id="limite" min="0" step="1" inputmode="numeric">
-        </div>
-        <div class="acoes">
-          <button type="button" class="btn btn-secundario" id="btnRestaurar">Restaurar valores do arquivo</button>
-        </div>
-        <p class="msg ok" id="msgConfig" role="status" aria-live="polite"></p>
-      </details>
-    </section>
-  </div>
+      <p class="msg ok" id="msgConfig" role="status" aria-live="polite"></p>
+    </details>
+  </section>
 
   <!-- ===================== LISTA DE INSCRITOS (recolhida por padrão) ===================== -->
   <section class="painel">
@@ -732,10 +692,6 @@ import Chart from 'chart.js/auto';
 import { supabase } from './src/lib/supabaseClient.js';
 import { 
   getRegistrations, 
-  saveRegistrationsBatch, 
-  replaceRegistrationsBatch, 
-  clearRegistrations, 
-  getStagesMap, 
   subscribeToRegistrations, 
   isCloudConnected 
 } from './src/services/dashboardService.js';
@@ -1121,9 +1077,6 @@ function renderAvisos(c) {
   const itens = [];
   const add = (tipo, ico, html) => itens.push(`<div class="aviso aviso-${tipo}"><span class="ico" aria-hidden="true">${ico}</span><p>${html}</p></div>`);
 
-  if (estado.exemplo) {
-    add('info', '🧪', '<strong>Dados fictícios de exemplo.</strong> Cole a lista real em <a href="#entradaDados">Entrada de dados</a> e clique em “Atualizar dashboard”.');
-  }
   if (c.baseTotal !== BASE_ESPERADA) {
     add('alerta', '⚠️', `A soma das bases por estágio é <strong>${c.baseTotal}</strong>, diferente de <strong>${BASE_ESPERADA}</strong>. Revise em <a href="#config" data-abrir-config>Configurações</a>.`);
   }
@@ -1131,16 +1084,9 @@ function renderAvisos(c) {
     const lista = c.excedentes.map(l => `${l.estagio} (${l.inscritos} inscritos, base ${l.base})`).join(', ');
     add('alerta', '⚠️', `Há estágio com mais inscritos que a base: ${esc(lista)}. Ajuste a base em <a href="#config" data-abrir-config>Configurações</a>.`);
   }
-  if (estado.revisar.length) {
-    add('erro', '🔎', `<strong>${estado.revisar.length} ${estado.revisar.length === 1 ? 'linha não foi contada' : 'linhas não foram contadas'}</strong> e ${estado.revisar.length === 1 ? 'precisa' : 'precisam'} de revisão. <a href="#caixaRevisar">Ver caixa “Revisar”</a>.`);
-  }
-  const dups = estado.relatorio ? estado.relatorio.duplicados.length : 0;
-  if (dups) {
-    add('alerta', '♻️', `${dups} ${dups === 1 ? 'duplicado foi removido' : 'duplicados foram removidos'} na última importação (contados uma vez). <a href="#caixaDuplicados">Ver detalhes</a>.`);
-  }
   const possiveis = possiveisDuplicidades().length;
   if (possiveis) {
-    add('alerta', '👥', `${possiveis} ${possiveis === 1 ? 'nome aparece' : 'nomes aparecem'} em mais de um estágio (possível duplicidade). <a href="#caixaPossiveis">Ver detalhes</a>.`);
+    add('alerta', '👥', `${possiveis} ${possiveis === 1 ? 'nome aparece' : 'nomes aparecem'} em mais de um estágio (possível duplicidade).`);
   }
   if (c.totalInscritos === 0) {
     add('info', '🕸️', 'Nenhuma inscrição registrada ainda. Todas as turmas aparecem como <strong>Turma Crítica</strong>.');
@@ -1417,44 +1363,6 @@ function renderTabela(c) {
   $('#verificacao').innerHTML = v.join('');
 }
 
-/* ---------- Relatório da importação ---------- */
-function renderRelatorio() {
-  const r = estado.relatorio;
-  $('#resumoImport').innerHTML = r
-    ? `<strong>${esc(r.modo)}</strong> em ${esc(r.quando)}${r.exemplo ? ' (dados de exemplo)' : ''}: ${r.lidas} ${r.lidas === 1 ? 'linha lida' : 'linhas lidas'} = <strong>${r.validas}</strong> ${r.validas === 1 ? 'válida' : 'válidas'} + ${r.duplicados.length} ${r.duplicados.length === 1 ? 'duplicada removida' : 'duplicadas removidas'} + ${r.revisarQtd} para revisar${r.cabecalhos ? ` + ${r.cabecalhos} ${r.cabecalhos === 1 ? 'cabeçalho ignorado' : 'cabeçalhos ignorados'}` : ''}. Total na lista: <strong>${estado.registros.length}</strong>.`
-    : 'Nenhuma importação ainda.';
-
-  // Caixa "Revisar": linha original + motivo (lista recolhida para não expor nomes na tela)
-  const cr = $('#caixaRevisar');
-  if (estado.revisar.length) {
-    cr.className = 'caixa revisar';
-    cr.innerHTML = `
-      <h3>🔎 Revisar <span class="contador">${estado.revisar.length}</span></h3>
-      <p>Estas linhas <strong>não foram contadas</strong>. Corrija o estágio (K1, K2, J, J1, J2, T1–T6) e importe novamente.</p>
-      <details><summary>Mostrar linhas originais</summary>
-        <ul>${estado.revisar.map(x => `<li><span class="nlinha">linha ${x.n}</span><code>${esc(x.linha.replace(/\t/g, ' ⇥ '))}</code><span class="motivo">${esc(x.motivo)}</span></li>`).join('')}</ul>
-      </details>`;
-  } else {
-    cr.className = 'caixa vazia';
-    cr.innerHTML = '<h3>✓ Revisar <span class="contador">0</span></h3><p>Nenhuma linha pendente de revisão.</p>';
-  }
-
-  // Duplicados removidos na última importação
-  const cd = $('#caixaDuplicados');
-  const dups = r ? r.duplicados : [];
-  cd.innerHTML = `
-    <h3>♻️ Duplicados removidos <span class="contador">${dups.length}</span></h3>
-    <p>Mesmo nome e mesmo estágio: contados uma única vez.</p>
-    ${dups.length ? `<details><summary>Mostrar duplicados</summary><ul>${dups.map(d => `<li><span class="nlinha">linha ${d.n}</span><code>${esc(exibirNome(d.nome))}</code><span>${d.estagio}</span></li>`).join('')}</ul></details>` : ''}`;
-
-  // Possível duplicidade: mesmo nome em estágios diferentes (contado, mas sinalizado)
-  const cp = $('#caixaPossiveis');
-  const poss = possiveisDuplicidades();
-  cp.innerHTML = `
-    <h3>👥 Possível duplicidade <span class="contador">${poss.length}</span></h3>
-    <p>Mesmo nome em estágios diferentes: foi contado em cada estágio. Confira se é o mesmo aluno.</p>
-    ${poss.length ? `<details><summary>Mostrar nomes</summary><ul>${poss.map(p => `<li><code>${esc(exibirNome(p.nome))}</code><span>${p.estagios.join(', ')}</span></li>`).join('')}</ul></details>` : ''}`;
-}
 
 /* ---------- Lista de inscritos e oportunidades por estágio ---------- */
 function renderLista() {
@@ -1540,7 +1448,6 @@ function atualizarTudo() {
   renderPrioridade(c);
   renderGrafico(c);
   renderTabela(c);
-  renderRelatorio();
   renderLista();
   renderSomaBases();
   $('#atualizadoEm').textContent = estado.atualizadoEm ? `Última atualização: ${dataHoraBR(new Date(estado.atualizadoEm))}` : '';
@@ -1611,185 +1518,7 @@ function atualizarStatusNuvem(status, texto) {
   if (txt) txt.textContent = texto || '';
 }
 
-function mensagem(texto, tipo = 'info') {
-  const el = $('#msgEntrada');
-  el.className = 'msg ' + tipo;
-  el.textContent = texto;
-}
 
-/** Importa o conteúdo da caixa de texto. modo: 'substituir' | 'adicionar' */
-async function importar(modo) {
-  const campo = $('#entrada');
-  const texto = campo.value;
-  if (!texto.trim()) {
-    mensagem('Cole a lista de inscritos (ou importe um arquivo) antes de continuar.', 'erro');
-    campo.focus();
-    return;
-  }
-  const eraExemplo = estado.exemplo;
-  const substituir = modo === 'substituir' || eraExemplo; // dados de exemplo nunca se misturam com dados reais
-  const r = processarTexto(texto, substituir ? [] : estado.registros);
-
-  if (substituir) {
-    estado.registros = r.novos;
-    estado.revisar = r.revisar;
-  } else {
-    estado.registros = estado.registros.concat(r.novos);
-    estado.revisar = estado.revisar.concat(r.revisar);
-  }
-  estado.exemplo = false;
-  estado.atualizadoEm = new Date().toISOString();
-  estado.relatorio = {
-    modo: substituir ? 'Lista substituída' : 'Adicionado à lista',
-    quando: dataHoraBR(new Date()),
-    lidas: r.lidas, validas: r.novos.length, cabecalhos: r.cabecalhos,
-    revisarQtd: r.revisar.length, duplicados: r.duplicados, exemplo: false
-  };
-  campo.value = ''; // limpa a caixa para não deixar nomes expostos
-  salvarDados();
-  atualizarTudo();
-
-  const partes = [`${r.novos.length} ${r.novos.length === 1 ? 'inscrição válida' : 'inscrições válidas'}`];
-  if (r.duplicados.length) partes.push(`${r.duplicados.length} ${r.duplicados.length === 1 ? 'duplicado removido' : 'duplicados removidos'}`);
-  if (r.revisar.length) partes.push(`${r.revisar.length} para revisar`);
-  const prefixo = eraExemplo && modo === 'adicionar' ? 'Os dados de exemplo foram substituídos. ' : '';
-
-  if (isCloudConnected()) {
-    isSavingLocally = true;
-    atualizarStatusNuvem('sincronizando', 'Sincronizando na nuvem...');
-    mensagem(`${prefixo}${substituir ? 'Dashboard atualizado' : 'Lista atualizada'}: ${partes.join(' · ')}. Sincronizando com Supabase...`, 'info');
-
-    try {
-      const stageMap = await getStagesMap();
-      let res;
-      if (substituir) {
-        res = await replaceRegistrationsBatch(r.novos, stageMap);
-      } else {
-        res = await saveRegistrationsBatch(r.novos, stageMap);
-      }
-      console.log(`[Supabase] Sincronizado com sucesso: ${res.count} registros.`);
-      atualizarStatusNuvem('conectado', 'Nuvem sincronizada');
-      mensagem(`${prefixo}${substituir ? 'Dashboard atualizado (substituído na nuvem)' : 'Lista atualizada (adicionado à nuvem)'}: ${partes.join(' · ')}.`, r.revisar.length ? 'info' : 'ok');
-    } catch (err) {
-      console.error('[Supabase] Erro ao sincronizar:', err);
-      atualizarStatusNuvem('erro', 'Erro de sincronização');
-      mensagem(`Salvo neste navegador, mas ocorreu um erro no Supabase: ${err.message}`, 'erro');
-    } finally {
-      setTimeout(() => { isSavingLocally = false; }, 800);
-    }
-  } else {
-    mensagem(`${prefixo}${substituir ? 'Dashboard atualizado' : 'Lista atualizada'}: ${partes.join(' · ')}.`, r.revisar.length ? 'info' : 'ok');
-  }
-}
-
-async function limparDados() {
-  const conectado = isCloudConnected();
-  const confirmMsg = conectado
-    ? 'Apagar toda a lista de inscritos? Esta ação apagará os dados deste navegador e da nuvem (Supabase) para todos os coordenadores.'
-    : 'Apagar a lista de inscritos deste navegador? As configurações de base serão mantidas.';
-
-  if (!confirm(confirmMsg)) return;
-
-  estado.registros = [];
-  estado.revisar = [];
-  estado.relatorio = null;
-  estado.exemplo = false;
-  estado.atualizadoEm = new Date().toISOString();
-  $('#entrada').value = '';
-  if (estado.salvarLista) salvarDados(); else armazenamento.remover(CHAVE_DADOS);
-  atualizarTudo();
-
-  if (conectado) {
-    isSavingLocally = true;
-    atualizarStatusNuvem('sincronizando', 'Limpando dados na nuvem...');
-    try {
-      await clearRegistrations();
-      atualizarStatusNuvem('conectado', 'Nuvem sincronizada (zerada)');
-      mensagem('Dados apagados com sucesso neste navegador e na nuvem (Supabase). O dashboard está zerado.', 'ok');
-    } catch (err) {
-      console.error('[Supabase] Erro ao limpar dados:', err);
-      atualizarStatusNuvem('erro', 'Erro ao limpar nuvem');
-      mensagem(`Dados apagados localmente, mas erro ao limpar na nuvem: ${err.message}`, 'erro');
-    } finally {
-      setTimeout(() => { isSavingLocally = false; }, 800);
-    }
-  } else {
-    mensagem('Dados apagados. O dashboard está zerado.', 'ok');
-  }
-}
-
-/** Lê arquivo CSV/TXT localmente (UTF-8; se houver caracteres inválidos, tenta Windows-1252 do Excel). */
-function lerArquivo(arquivo) {
-  if (!arquivo) return;
-  const colocar = (txt) => {
-    $('#entrada').value = txt.replace(/^\uFEFF/, '');
-    const n = txt.split(/\r\n|\n|\r/).filter(l => l.trim()).length;
-    mensagem(`Arquivo "${arquivo.name}" carregado (${n} linhas). Clique em “Atualizar dashboard” ou “Adicionar à lista”.`, 'info');
-    $('#arquivo').value = '';
-  };
-  const leitor = new FileReader();
-  leitor.onload = () => {
-    const txt = String(leitor.result || '');
-    if (txt.includes('\uFFFD')) {
-      const alt = new FileReader();
-      alt.onload = () => colocar(String(alt.result || ''));
-      alt.readAsText(arquivo, 'windows-1252');
-    } else {
-      colocar(txt);
-    }
-  };
-  leitor.onerror = () => mensagem('Não foi possível ler o arquivo.', 'erro');
-  leitor.readAsText(arquivo, 'UTF-8');
-}
-
-/* =====================================================================
-   9) DADOS FICTÍCIOS DE EXEMPLO (para teste)
-   ===================================================================== */
-function gerarTextoExemplo() {
-  // Distribuição de teste: exatamente 5 alunos no J2 (5 de 30 = 16.7%), turmas críticas T4 (2), T5 (1) e T6 (0)
-  const qtdDesejada = { K1: 3, K2: 12, J: 10, J1: 14, J2: 5, T1: 12, T2: 8, T3: 6, T4: 2, T5: 1, T6: 0 };
-  const formatos = [
-    (n, e) => `${n};${e}`,
-    (n, e) => `${n}, ${e.toLowerCase().replace(/^([a-z])(\d)$/, '$1 $2')}`,
-    (n, e) => `${n} - ${e.replace(/^([A-Z])(\d)$/, '$1-$2')}`,
-    (n, e) => `${n}\t${e}`,
-    (n, e) => `${e};${n}`
-  ];
-  const gerados = [];
-  let fmtIdx = 0;
-  ESTAGIOS.forEach(est => {
-    const daTurma = OFICIAIS_POR_ESTAGIO[est] || [];
-    const meta = qtdDesejada[est] || 0;
-    for (let k = 0; k < meta && k < daTurma.length; k++) {
-      const aluno = daTurma[k];
-      const fn = formatos[fmtIdx % formatos.length];
-      gerados.push({ nome: aluno.nome, estagio: est, linha: fn(aluno.nome, est) });
-      fmtIdx++;
-    }
-  });
-
-  const linhas = ['Nome;Estágio', ...gerados.map(g => g.linha)];
-  // Casos de teste: duplicado exato, variação de formato e linhas para revisar
-  if (gerados.length > 5) {
-    linhas.push(`${gerados[1].nome};${gerados[1].estagio}`); // duplicado idêntico
-    linhas.push(`${gerados[0].nome};K2`);                      // mesmo nome em estágio diferente (possível duplicidade)
-  }
-  linhas.push('Lucas Martins;T7', 'Mariana Rocha, K3', 'Nome Sem Turma Nem Cadastro'); // linhas para a caixa Revisar
-  return linhas.join('\n');
-}
-
-function carregarExemplo() {
-  const r = processarTexto(gerarTextoExemplo(), []);
-  estado.registros = r.novos;
-  estado.revisar = r.revisar;
-  estado.exemplo = true;
-  estado.atualizadoEm = new Date().toISOString();
-  estado.relatorio = {
-    modo: 'Exemplo carregado', quando: dataHoraBR(new Date()),
-    lidas: r.lidas, validas: r.novos.length, cabecalhos: r.cabecalhos,
-    revisarQtd: r.revisar.length, duplicados: r.duplicados, exemplo: true
-  };
-}
 
 /* =====================================================================
    10) CONTROLE DE ACESSO POR PIN (LGPD) E EVENTOS
@@ -1974,7 +1703,6 @@ function iniciarRealtimeSync() {
         atualizarTudo();
         renderLista();
         atualizarStatusNuvem('conectado', 'Nuvem sincronizada');
-        mensagem('⚡ Dados atualizados em tempo real via nuvem.', 'info');
       }
     }, 350);
   });
@@ -1999,11 +1727,11 @@ async function iniciar() {
     atualizarStatusNuvem('offline', 'Modo offline');
   }
 
-  const dadosSupabase = await carregarDadosSupabase(false);
+  const dadosSupabase = await carregarDadosSupabase(true);
   if (dadosSupabase) {
     atualizarStatusNuvem('conectado', 'Nuvem sincronizada');
   } else {
-    if (!carregarDados()) carregarExemplo(); // primeira abertura ou offline: mostra exemplo
+    carregarDados();
     if (isCloudConnected()) {
       atualizarStatusNuvem('conectado', 'Nuvem conectada (base vazia)');
     }
@@ -2013,37 +1741,12 @@ async function iniciar() {
   iniciarRealtimeSync();
 
   preencherConfig();
-  $('#chkSalvar').checked = estado.salvarLista;
   $('#chkMascarar').checked = estado.mascarar;
   definirOrdenacao(estado.ordenacao);
 
   renderPrazo();
   setInterval(renderPrazo, 60 * 1000); // mantém a contagem correta se a página ficar aberta
   atualizarTudo();
-
-  // Entrada de dados
-  $('#btnAtualizar').addEventListener('click', () => importar('substituir'));
-  $('#btnAdicionar').addEventListener('click', () => importar('adicionar'));
-  $('#btnLimpar').addEventListener('click', limparDados);
-  $('#arquivo').addEventListener('change', (e) => lerArquivo(e.target.files[0]));
-  $('#entrada').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); importar('substituir'); }
-  });
-  $('#btnExemplo').addEventListener('click', () => {
-    if (estado.registros.length && !estado.exemplo &&
-        !confirm('Substituir a lista atual pelos dados fictícios de exemplo? (a lista salva será mantida até você importar outra)')) return;
-    carregarExemplo();
-    atualizarTudo();
-    mensagem('Dados fictícios de exemplo carregados.', 'info');
-  });
-  $('#btnIrEntrada').addEventListener('click', () => setTimeout(() => $('#entrada').focus({ preventScroll: true }), 350));
-
-  $('#chkSalvar').addEventListener('change', (e) => {
-    estado.salvarLista = e.target.checked;
-    salvarPreferencias();
-    if (estado.salvarLista) { salvarDados(); mensagem('A lista ficará salva somente neste navegador.', 'ok'); }
-    else { armazenamento.remover(CHAVE_DADOS); mensagem('Lista removida do navegador. Ao fechar a página, será preciso colar novamente.', 'info'); }
-  });
 
   // Ordenação
   $('#ordEstagios').addEventListener('click', () => { definirOrdenacao('estagios'); atualizarTudo(); });
@@ -2079,7 +1782,6 @@ async function iniciar() {
     estado.mascarar = e.target.checked;
     salvarPreferencias();
     renderLista();
-    renderRelatorio();
   });
   if ($('#chkMostrarFaltantes')) {
     $('#chkMostrarFaltantes').addEventListener('change', renderLista);
