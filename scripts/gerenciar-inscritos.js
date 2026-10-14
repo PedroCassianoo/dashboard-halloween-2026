@@ -61,11 +61,50 @@ function normalizarEstagio(txt) {
   return semAcentos(txt).toUpperCase().replace(/[\s\-–—_.]/g, '');
 }
 
+const oficialNorms = ALUNOS_OFICIAIS.map(([n, e]) => ({ nome: n, estagio: e, chave: normalizarNome(n) }));
+
+function buscarFuzzyOficial(nomeOuChave) {
+  const chave = normalizarNome(nomeOuChave);
+  if (MAPA_ALUNOS_OFICIAIS.has(chave)) {
+    const ofc = MAPA_ALUNOS_OFICIAIS.get(chave);
+    return { nome: ofc.nome, estagio: ofc.estagio, chaveNome: chave };
+  }
+
+  const tokens = chave.split(' ').filter(t => t.length > 1);
+  if (tokens.length >= 2) {
+    const fuzzy = oficialNorms.filter(o => {
+      return tokens.every(t => o.chave.includes(t)) || o.chave.includes(chave) || chave.includes(o.chave);
+    });
+    if (fuzzy.length === 1) return { nome: fuzzy[0].nome, estagio: fuzzy[0].estagio, chaveNome: fuzzy[0].chave };
+
+    const first = tokens[0];
+    const last = tokens[tokens.length - 1];
+    const flMatch = oficialNorms.filter(o => o.chave.startsWith(first) && o.chave.endsWith(last));
+    if (flMatch.length === 1) return { nome: flMatch[0].nome, estagio: flMatch[0].estagio, chaveNome: flMatch[0].chave };
+  }
+
+  return null;
+}
+
 function dividirLinha(linha) {
   if (linha.includes('\t')) return linha.split('\t');
   if (linha.includes(';')) return linha.split(';');
   if (linha.includes(',')) return linha.split(',');
   if (/\s[-–—]\s/.test(linha)) return linha.split(/\s+[-–—]\s+/);
+
+  // Suporte a espaço quando a última ou primeira palavra for um estágio válido
+  const partesEspaco = linha.trim().split(/\s+/);
+  if (partesEspaco.length >= 2) {
+    const ultimo = normalizarEstagio(partesEspaco[partesEspaco.length - 1]);
+    const primeiro = normalizarEstagio(partesEspaco[0]);
+    if (ESTAGIOS_VALIDOS.has(ultimo)) {
+      return [partesEspaco.slice(0, -1).join(' '), partesEspaco[partesEspaco.length - 1]];
+    }
+    if (ESTAGIOS_VALIDOS.has(primeiro)) {
+      return [partesEspaco[0], partesEspaco.slice(1).join(' ')];
+    }
+  }
+
   return null;
 }
 
@@ -73,14 +112,13 @@ function interpretarLinha(original) {
   const linha = original.replace(/^\uFEFF/, '').trim();
   if (!linha) return null;
 
-  // 1. Nome exato ou sem acento presente na base oficial de 204 alunos
-  const linhaNorm = normalizarNome(linha);
-  if (MAPA_ALUNOS_OFICIAIS.has(linhaNorm)) {
-    const ofc = MAPA_ALUNOS_OFICIAIS.get(linhaNorm);
-    return { ok: true, nome: ofc.nome, estagio: ofc.estagio, chaveNome: linhaNorm };
+  // 1. Tenta identificar diretamente na base oficial da escola (exato ou fuzzy)
+  const matchOficial = buscarFuzzyOficial(linha);
+  if (matchOficial) {
+    return { ok: true, nome: matchOficial.nome, estagio: matchOficial.estagio, chaveNome: matchOficial.chaveNome };
   }
 
-  // 2. Linhas com separadores (Nome;Estágio, Nome, Estágio, etc.)
+  // 2. Linhas com separadores ou com estágio no final/início
   const partesBrutas = dividirLinha(linha);
   if (!partesBrutas) {
     return { ok: false, linha, motivo: 'Formato não reconhecido (use Nome;Estágio ou nome completo)' };
@@ -88,10 +126,9 @@ function interpretarLinha(original) {
 
   const partes = partesBrutas.map(p => p.trim().replace(/^["']+|["']+$/g, '').trim()).filter(Boolean);
   if (partes.length < 2) {
-    const p0Norm = normalizarNome(partes[0]);
-    if (MAPA_ALUNOS_OFICIAIS.has(p0Norm)) {
-      const ofc = MAPA_ALUNOS_OFICIAIS.get(p0Norm);
-      return { ok: true, nome: ofc.nome, estagio: ofc.estagio, chaveNome: p0Norm };
+    const p0Oficial = buscarFuzzyOficial(partes[0]);
+    if (p0Oficial) {
+      return { ok: true, nome: p0Oficial.nome, estagio: p0Oficial.estagio, chaveNome: p0Oficial.chaveNome };
     }
     return { ok: false, linha, motivo: 'Falta o nome ou o estágio' };
   }
@@ -107,17 +144,21 @@ function interpretarLinha(original) {
     estagio = primeiro;
     nome = partes.slice(1).join(' ');
   } else {
-    const t1 = normalizarNome(partes.slice(0, -1).join(' '));
-    const t2 = normalizarNome(partes.slice(1).join(' '));
-    if (MAPA_ALUNOS_OFICIAIS.has(t1)) {
-      const ofc = MAPA_ALUNOS_OFICIAIS.get(t1);
-      return { ok: true, nome: ofc.nome, estagio: ofc.estagio, chaveNome: t1 };
+    const t1Oficial = buscarFuzzyOficial(partes.slice(0, -1).join(' '));
+    const t2Oficial = buscarFuzzyOficial(partes.slice(1).join(' '));
+    if (t1Oficial) {
+      return { ok: true, nome: t1Oficial.nome, estagio: t1Oficial.estagio, chaveNome: t1Oficial.chaveNome };
     }
-    if (MAPA_ALUNOS_OFICIAIS.has(t2)) {
-      const ofc = MAPA_ALUNOS_OFICIAIS.get(t2);
-      return { ok: true, nome: ofc.nome, estagio: ofc.estagio, chaveNome: t2 };
+    if (t2Oficial) {
+      return { ok: true, nome: t2Oficial.nome, estagio: t2Oficial.estagio, chaveNome: t2Oficial.chaveNome };
     }
     return { ok: false, linha, motivo: `Estágio inválido: "${partes[partes.length - 1]}"` };
+  }
+
+  // Se o nome informado bater na base oficial com ligeira variação, adota o nome canônico
+  const ofc = buscarFuzzyOficial(nome);
+  if (ofc) {
+    return { ok: true, nome: ofc.nome, estagio: ofc.estagio || estagio, chaveNome: ofc.chaveNome };
   }
 
   nome = nome.replace(/\s+/g, ' ').trim();

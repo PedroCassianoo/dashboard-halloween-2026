@@ -1,0 +1,41 @@
+Alice Galvani Coteco;J2
+Henry Gavioli Brenelli;K1
+Arthur Miguel Carvalho Lima;J1
+João Vitor Carvalho Lima;T2
+Luís Otávio Rigo Miguel;T2
+Pedro Henrique Rigo Miguel;J1
+Luiz Marques de Oliveira Dalbem;K2
+Gabriel Lima da Silva;K2
+Livia Galvão dos Santos;J
+Isabela Bugarim Pereira;J
+Sara Rossin Akahoshi Collado;J2
+Felipe Augusto Pavan D. Filho;K2
+Tomás Zuzi Bardin;K2
+Karen Bernadette Mendonça Convento;K2
+Helena Martins Rocha;K2
+Elisa Guadagnini Araújo;T2
+Leonardo Nascimbem de Godoy;J2
+Guilherme de Luca Lima;T3
+Gustavo de Luca Lima;J2
+Aimê Trevisan Machado;T2
+Ivy Refundini Albuquerque;J
+Felipe Moura Ioricci;T3
+Julia Milena Feijó de Carvalho;T2
+Henrique Santiciolli Lage;J2
+Luiza Carvalho Malia;T2
+Pedro Luiz Tasinaffo Simão;J2
+Miguel Branco de Medeiros;T2
+Maya Machado de Souza;K2
+Isabella Minako Alberton;T3
+Maria Eduarda Ayumi Barbosa;T2
+Isadora Vicentin Lima;T1
+Laura dos Santos Magalhães;J1
+Alice Domingues Ferreira;T2
+Matheus Zuccherato Gil;J1
+Heloisa Delfino da Costa;T2
+Lorena Delfino da Costa;K2
+Vinicius Ferreira França de Oliveira;J1
+Beatriz Gasparoni Cardoso;J1
+Rafaela Tonon Pietrobon;K2
+João Kazuo Guima;T1
+Isabela Keiko Guima;J1
